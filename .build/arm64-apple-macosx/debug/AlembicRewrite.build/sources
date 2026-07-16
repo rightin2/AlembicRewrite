@@ -1,6 +1,7 @@
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/AnthropicClient.swift
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/App.swift
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/CostMeter.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/DesignTokens.swift
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HistoryStore.swift
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HotkeyManager.swift
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/KeychainStore.swift
@@ -15,3 +16,4 @@
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SelectionService.swift
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SettingsWindow.swift
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/StyleStore.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/DerivedSources/resource_bundle_accessor.swift

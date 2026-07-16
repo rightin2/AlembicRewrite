@@ -1,6 +1,7 @@
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/AnthropicClient.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/App.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/CostMeter.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/DesignTokens.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HistoryStore.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HotkeyManager.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/KeychainStore.swift.o
@@ -15,3 +16,4 @@
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SelectionService.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SettingsWindow.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/StyleStore.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/resource_bundle_accessor.swift.o

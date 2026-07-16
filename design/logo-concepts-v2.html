@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>AlembicRewrite — Logo v2 (brand-matched)</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, sans-serif; background:#17150f; color:#eee; margin:0; padding:48px; }
+  h1 { font-weight:700; letter-spacing:-0.5px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(360px,1fr)); gap:28px; max-width:1500px; }
+  .card { background:#221f18; border-radius:20px; padding:28px; box-shadow:0 8px 30px rgba(0,0,0,.35); }
+  .card h2 { margin:0 0 4px; font-size:18px; color:#e5c877; }
+  .card p { margin:0 0 20px; font-size:13px; opacity:.7; line-height:1.45; }
+  .row { display:flex; align-items:center; gap:24px; }
+  .appicon { width:150px; height:150px; border-radius:34px; box-shadow:0 12px 28px rgba(0,0,0,.5); flex:none; }
+  .bars { display:flex; flex-direction:column; gap:8px; }
+  .bar { display:flex; align-items:center; gap:10px; padding:5px 14px; border-radius:8px; font-size:12px; }
+  .bar.light { background:linear-gradient(#fbfbfd,#ececf1); color:#333; border:1px solid #ccc; }
+  .bar.dark  { background:linear-gradient(#3a3a3e,#2a2a2c); color:#eee; }
+  .bar svg { width:17px; height:17px; }
+  .tag { display:inline-block; font-size:11px; background:#e5c87722; color:#e5c877; padding:2px 8px; border-radius:20px; margin-bottom:10px; font-weight:600;}
+  defs {}
+</style>
+</head>
+<body>
+<h1>AlembicRewrite — brand-matched concepts</h1>
+<p style="opacity:.65; max-width:680px;">Siblings of the company mark: gold on deep racing green, embossed bezel, serif weight, single sparkle. Same squircle + bezel treatment on all three; the difference is the mark itself.</p>
+
+<svg width="0" height="0">
+  <defs>
+    <radialGradient id="bggrad" cx="35%" cy="25%" r="90%">
+      <stop offset="0" stop-color="#3d4a3a"/><stop offset=".6" stop-color="#28362b"/><stop offset="1" stop-color="#16211a"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4e3ae"/><stop offset=".45" stop-color="#d9b25f"/><stop offset=".55" stop-color="#b98a3e"/><stop offset="1" stop-color="#e8c97e"/>
+    </linearGradient>
+    <linearGradient id="goldStroke" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e9bd"/><stop offset="1" stop-color="#a97e33"/>
+    </linearGradient>
+    <linearGradient id="bezel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8a9a7e"/><stop offset=".5" stop-color="#3c4a38"/><stop offset="1" stop-color="#5c6b50"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="grid">
+
+<!-- V2-A: The A-Flask monogram -->
+<div class="card">
+  <span class="tag">Concept A</span>
+  <h2>The A-Flask Monogram</h2>
+  <p>The company "A", but its counter (the triangle inside) is an alembic flask, and the crossbar is the liquid line. Reads as the Alembic A first, the flask second. Closest sibling to the parent mark.</p>
+  <div class="row">
+    <svg class="appicon" viewBox="0 0 128 128">
+      <rect width="128" height="128" rx="30" fill="url(#bggrad)"/>
+      <rect x="3.5" y="3.5" width="121" height="121" rx="27" fill="none" stroke="url(#bezel)" stroke-width="3"/>
+      <!-- serif A -->
+      <g fill="url(#gold)" stroke="url(#goldStroke)" stroke-width="1">
+        <path d="M58 26 h12 L98 98 h-13 l-6.5-18 h-29 L43 98 H30 z M52.8 69 h22.4 L64 38 z"/>
+      </g>
+      <!-- flask inside the A's counter -->
+      <path d="M60 46 h8 v8 c4.5 2.5 7.5 7 7.5 12 a11.5 11.5 0 1 1 -23 0 c0-5 3-9.5 7.5-12 z"
+            fill="none" stroke="url(#gold)" stroke-width="3.4" stroke-linejoin="round" transform="translate(0,-1)"/>
+      <!-- sparkle -->
+      <path d="M96 22 l3 7.5 7.5 3 -7.5 3 -3 7.5 -3 -7.5 -7.5 -3 7.5 -3 z" fill="#f7e9bd"/>
+    </svg>
+    <div class="bars">
+      <div class="bar light">
+        <svg viewBox="0 0 128 128"><path d="M56 14 h16 L106 114 h-16 l-8-24 h-36 l-8 24 H22 z M50 74 h28 L64 32 z" fill="#1d1d1f"/></svg>
+        9:41 AM · light menu bar
+      </div>
+      <div class="bar dark">
+        <svg viewBox="0 0 128 128"><path d="M56 14 h16 L106 114 h-16 l-8-24 h-36 l-8 24 H22 z M50 74 h28 L64 32 z" fill="#fff"/></svg>
+        9:41 AM · dark menu bar
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- V2-B: The Gold Alembic -->
+<div class="card">
+  <span class="tag">Concept B</span>
+  <h2>The Gold Alembic</h2>
+  <p>A gold retort in place of the A: the product mark to the company's letter mark, like Adobe's tool icons under one brand. Drop falling from the spout onto a written line, single sparkle.</p>
+  <div class="row">
+    <svg class="appicon" viewBox="0 0 128 128">
+      <rect width="128" height="128" rx="30" fill="url(#bggrad)"/>
+      <rect x="3.5" y="3.5" width="121" height="121" rx="27" fill="none" stroke="url(#bezel)" stroke-width="3"/>
+      <!-- retort -->
+      <path d="M46 32 h16 v13 c10 4.5 17 14 17 24.5 a25 25 0 1 1 -50 0 c0-10.5 7-20 17-24.5 z"
+            fill="none" stroke="url(#gold)" stroke-width="5.5" stroke-linejoin="round"/>
+      <path d="M62 38 c13 0 23 6 29 15" fill="none" stroke="url(#gold)" stroke-width="5.5" stroke-linecap="round"/>
+      <!-- liquid -->
+      <path d="M39 74 a15 15 0 0 0 30 0 q-7.5 4.5 -15 0 t-15 0 z" fill="url(#gold)" opacity=".85"/>
+      <!-- drop + line -->
+      <path d="M93 62 q5.5 8.5 0 13 q-5.5-4.5 0-13z" fill="url(#gold)"/>
+      <rect x="80" y="86" width="28" height="5" rx="2.5" fill="url(#gold)"/>
+      <rect x="87" y="96" width="21" height="5" rx="2.5" fill="url(#gold)" opacity=".55"/>
+      <path d="M97 20 l3 7.5 7.5 3 -7.5 3 -3 7.5 -3 -7.5 -7.5 -3 7.5 -3 z" fill="#f7e9bd"/>
+    </svg>
+    <div class="bars">
+      <div class="bar light">
+        <svg viewBox="0 0 128 128"><g fill="none" stroke="#1d1d1f" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"><path d="M46 24 h16 v16 c11 5 19 16 19 28 a27 27 0 1 1 -54 0 c0-12 8-23 19-28 z"/><path d="M62 32 c16 0 27 7 34 18"/></g><path d="M100 62 q7 11 0 16 q-7-5 0-16z" fill="#1d1d1f"/><rect x="84" y="90" width="30" height="9" rx="4.5" fill="#1d1d1f"/></svg>
+        9:41 AM · light menu bar
+      </div>
+      <div class="bar dark">
+        <svg viewBox="0 0 128 128"><g fill="none" stroke="#fff" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"><path d="M46 24 h16 v16 c11 5 19 16 19 28 a27 27 0 1 1 -54 0 c0-12 8-23 19-28 z"/><path d="M62 32 c16 0 27 7 34 18"/></g><path d="M100 62 q7 11 0 16 q-7-5 0-16z" fill="#fff"/><rect x="84" y="90" width="30" height="9" rx="4.5" fill="#fff"/></svg>
+        9:41 AM · dark menu bar
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- V2-C: A with quill -->
+<div class="card">
+  <span class="tag">Concept C</span>
+  <h2>The A with the Quill</h2>
+  <p>Direct riff on the parent logo's construction: where the company mark threads the rod of Asclepius through the A, this threads a gold quill. Company = healing staff; Rewrite = the pen. Instantly reads as family.</p>
+  <div class="row">
+    <svg class="appicon" viewBox="0 0 128 128">
+      <rect width="128" height="128" rx="30" fill="url(#bggrad)"/>
+      <rect x="3.5" y="3.5" width="121" height="121" rx="27" fill="none" stroke="url(#bezel)" stroke-width="3"/>
+      <!-- serif A -->
+      <g fill="url(#gold)" stroke="url(#goldStroke)" stroke-width="1">
+        <path d="M58 30 h12 L98 102 h-13 l-6.5-18 h-29 L43 102 H30 z M52.8 73 h22.4 L64 42 z"/>
+      </g>
+      <!-- quill through the A -->
+      <g transform="rotate(24 64 60)">
+        <path d="M64 18 C 58 34 58 52 64 88 C 70 52 70 34 64 18 z" fill="url(#gold)" stroke="url(#goldStroke)" stroke-width="1"/>
+        <path d="M64 30 L64 84" stroke="#7a5a24" stroke-width="1.6"/>
+        <path d="M64 88 L64 100" stroke="url(#gold)" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M61 97 L64 104 L67 97" fill="#f7e9bd"/>
+      </g>
+      <path d="M97 20 l3 7.5 7.5 3 -7.5 3 -3 7.5 -3 -7.5 -7.5 -3 7.5 -3 z" fill="#f7e9bd"/>
+    </svg>
+    <div class="bars">
+      <div class="bar light">
+        <svg viewBox="0 0 128 128"><path d="M56 20 h16 L104 110 h-15 l-7-21 h-36 l-7 21 H24 z M51 71 h26 L64 35 z" fill="#1d1d1f"/><g transform="rotate(24 64 60)"><path d="M64 6 C 56 26 56 48 64 92 C 72 48 72 26 64 6 z M64 92 L64 112" fill="#1d1d1f" stroke="#1d1d1f" stroke-width="6"/></g></svg>
+        9:41 AM · light menu bar
+      </div>
+      <div class="bar dark">
+        <svg viewBox="0 0 128 128"><path d="M56 20 h16 L104 110 h-15 l-7-21 h-36 l-7 21 H24 z M51 71 h26 L64 35 z" fill="#fff"/><g transform="rotate(24 64 60)"><path d="M64 6 C 56 26 56 48 64 92 C 72 48 72 26 64 6 z M64 92 L64 112" fill="#fff" stroke="#fff" stroke-width="6"/></g></svg>
+        9:41 AM · dark menu bar
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<p style="opacity:.5; font-size:12px; margin-top:36px;">Menu-bar icons are shown as macOS template images (flat monochrome), which is why they drop the gold — that's a platform requirement, not a design choice. The gold lives in the app icon and in-app branding.</p>
+</body>
+</html>

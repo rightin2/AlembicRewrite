@@ -31,6 +31,7 @@ public struct SettingsView: View {
                 .tabItem { Label("Styles", systemImage: "square.stack") }
         }
         .frame(width: 620, height: 480)
+        .tint(Alembic.accent)
     }
 }
 
@@ -107,7 +108,7 @@ struct APIKeysTab: View {
                         .disabled(anthropicKey.isEmpty)
                     if anthropicSaved {
                         Label("Saved to Keychain", systemImage: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
+                            .foregroundStyle(Alembic.accent)
                             .font(.footnote)
                     }
                     Spacer()
@@ -127,7 +128,7 @@ struct APIKeysTab: View {
                         .disabled(openaiKey.isEmpty)
                     if openaiSaved {
                         Label("Saved to Keychain", systemImage: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
+                            .foregroundStyle(Alembic.accent)
                             .font(.footnote)
                     }
                     Spacer()

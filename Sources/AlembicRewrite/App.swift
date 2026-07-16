@@ -18,6 +18,41 @@ import SwiftUI
 import AppKit
 import ServiceManagement
 
+// MARK: - Bundled icon loading
+
+/// Loads the bundled app + menu-bar icons via `Bundle.module`. Every accessor
+/// fails soft (returns nil) if the resource is absent, so callers keep their
+/// SF Symbol / system-default fallbacks.
+enum AppIcons {
+    /// The Dock / application icon (`AppIcon.icns`).
+    static func appIcon() -> NSImage? {
+        guard let url = Bundle.module.url(forResource: "AppIcon", withExtension: "icns") else {
+            return nil
+        }
+        return NSImage(contentsOf: url)
+    }
+
+    /// The menu-bar status icon, built from the 1x + 2x PNGs and rendered as a
+    /// template so it adapts to light/dark menu bars. Base logical size ~18pt.
+    static func menuBarIcon() -> NSImage? {
+        guard let base = loadPNG("MenuBarIcon") else { return nil }
+        if let retina = loadPNG("MenuBarIcon@2x"),
+           let rep = retina.representations.first {
+            base.addRepresentation(rep)
+        }
+        base.size = NSSize(width: 18, height: 18)
+        base.isTemplate = true
+        return base
+    }
+
+    private static func loadPNG(_ name: String) -> NSImage? {
+        guard let url = Bundle.module.url(forResource: name, withExtension: "png") else {
+            return nil
+        }
+        return NSImage(contentsOf: url)
+    }
+}
+
 // MARK: - Shared environment
 
 /// Single container for every concrete store and service. Instantiated once in
@@ -144,6 +179,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     lazy var coordinator = RewriteCoordinator(env: env, windows: windows)
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Set the Dock/app icon at runtime. A bare SPM executable has no
+        // Info.plist, so we load the bundled .icns and assign it directly.
+        // Fails soft: if the resource is missing, the system default is kept.
+        if let icon = AppIcons.appIcon() {
+            NSApp.applicationIconImage = icon
+        }
+
         // Seed the three built-in styles on a fresh install.
         try? env.styleStore.seedDefaultsIfEmpty()
 
@@ -262,7 +304,14 @@ struct AlembicRewriteApp: App {
                 coordinator: appDelegate.coordinator
             )
         } label: {
-            Image(systemName: "wand.and.stars")
+            // Bundled Alembic menu-bar glyph (template-rendered so it adapts to
+            // light/dark bars). Falls back to the SF Symbol if the resource is
+            // missing.
+            if let icon = AppIcons.menuBarIcon() {
+                Image(nsImage: icon)
+            } else {
+                Image(systemName: "wand.and.stars")
+            }
         }
         .menuBarExtraStyle(.menu)
     }

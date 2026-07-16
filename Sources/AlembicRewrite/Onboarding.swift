@@ -39,10 +39,11 @@ public struct OnboardingView: View {
             HStack(spacing: 12) {
                 Image(systemName: "wand.and.stars")
                     .font(.system(size: 34))
-                    .foregroundStyle(.tint)
+                    .foregroundStyle(Alembic.accent)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Welcome to Prompt Rewriter")
-                        .font(.title2).bold()
+                        .font(.alembicDisplay(22, weight: .semibold))
+                        .foregroundStyle(Alembic.ink)
                     Text("One quick permission and you're set.")
                         .foregroundStyle(.secondary)
                 }
@@ -61,7 +62,7 @@ public struct OnboardingView: View {
 
             if granted {
                 Label("Permission granted. You're ready to go.", systemImage: "checkmark.seal.fill")
-                    .foregroundStyle(.green)
+                    .foregroundStyle(Alembic.accent)
             }
 
             Spacer(minLength: 0)
@@ -77,6 +78,7 @@ public struct OnboardingView: View {
         }
         .padding(24)
         .frame(width: 460, height: 340)
+        .tint(Alembic.accent)
         .onAppear { granted = onRecheck() }
     }
 }

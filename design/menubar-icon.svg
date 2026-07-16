@@ -1,0 +1,8 @@
+<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- AlembicRewrite menu-bar template icon: serif R, quill leaf rising past its shoulder -->
+  <text x="8" y="112" font-family="Times New Roman, Georgia, serif" font-size="118" font-weight="bold" fill="#000">R</text>
+  <!-- quill leaf: nib at lower-left, tip at upper-right, clearly clear of the bowl -->
+  <g transform="rotate(40 96 44)">
+    <path d="M96 -14 C 89 8 89 34 96 66 C 103 34 103 8 96 -14 z" fill="#000"/>
+  </g>
+</svg>

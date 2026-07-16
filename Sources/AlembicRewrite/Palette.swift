@@ -117,27 +117,28 @@ public struct PaletteView: View {
         }
         .frame(width: 360)
         .background(VisualEffectBackground(material: .popover))
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: AlembicMetrics.radius, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+            RoundedRectangle(cornerRadius: AlembicMetrics.radius, style: .continuous)
+                .strokeBorder(Alembic.border.opacity(0.6), lineWidth: AlembicMetrics.hairline)
         )
+        .tint(Alembic.accent)
     }
 
     private var searchHeader: some View {
         HStack(spacing: 8) {
             Image(systemName: "magnifyingglass")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Alembic.accent)
             if model.filter.isEmpty {
                 Text("Filter styles…")
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Alembic.inkMuted)
             } else {
                 Text(model.filter)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(Alembic.ink)
             }
             Spacer()
         }
-        .font(.title3)
+        .font(.alembicDisplay(19, weight: .regular))
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
@@ -209,7 +210,7 @@ private struct PaletteRow: View {
         .padding(.vertical, 7)
         .background(
             RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .fill(isSelected ? Color.accentColor : Color.clear)
+                .fill(isSelected ? Alembic.accent : Color.clear)
         )
     }
 

@@ -228,19 +228,21 @@ public struct RewritePanelView: View {
         .frame(width: 520)
         .frame(minHeight: 360)
         .background(VisualEffectBackground())
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: AlembicMetrics.radius, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+            RoundedRectangle(cornerRadius: AlembicMetrics.radius, style: .continuous)
+                .strokeBorder(Alembic.border.opacity(0.6), lineWidth: AlembicMetrics.hairline)
         )
+        .tint(Alembic.accent)
     }
 
     private var header: some View {
         HStack(spacing: 8) {
             Image(systemName: "wand.and.stars")
-                .foregroundStyle(.tint)
+                .foregroundStyle(Alembic.accent)
             Text(model.styleName.isEmpty ? "Rewrite" : model.styleName)
-                .font(.headline)
+                .font(.alembicDisplay(17))
+                .foregroundStyle(Alembic.ink)
             Spacer()
             statusBadge
         }
@@ -261,7 +263,7 @@ public struct RewritePanelView: View {
             Label("Ready", systemImage: "checkmark.circle.fill")
                 .labelStyle(.titleAndIcon)
                 .font(.caption)
-                .foregroundStyle(.green)
+                .foregroundStyle(Alembic.accent)
         case .emptySelection:
             Label("No text selected", systemImage: "exclamationmark.circle")
                 .font(.caption)
@@ -361,8 +363,12 @@ public struct RewritePanelView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .background(
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.primary.opacity(0.06))
+            RoundedRectangle(cornerRadius: AlembicMetrics.radiusInner, style: .continuous)
+                .fill(Alembic.accentSoft.opacity(0.35))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: AlembicMetrics.radiusInner, style: .continuous)
+                .strokeBorder(Alembic.border.opacity(0.5), lineWidth: AlembicMetrics.hairline)
         )
     }
 
@@ -374,6 +380,7 @@ public struct RewritePanelView: View {
                 Label("Cancel", systemImage: "xmark")
             }
             .keyboardShortcut(.cancelAction)
+            .buttonStyle(.bordered)
 
             Spacer()
 
@@ -383,16 +390,21 @@ public struct RewritePanelView: View {
                 Label("Retry", systemImage: "arrow.clockwise")
             }
             .keyboardShortcut("r", modifiers: .command)
+            .buttonStyle(.bordered)
 
+            // Accept is the primary affordance: gold, filled, to stand apart
+            // from the green accent used elsewhere.
             Button {
                 model.accept()
             } label: {
                 Label("Accept", systemImage: "checkmark")
+                    .foregroundStyle(Color(red: 0.16, green: 0.14, blue: 0.06))
             }
             .keyboardShortcut(.defaultAction)
             .disabled(disableAccept)
+            .buttonStyle(.borderedProminent)
+            .tint(Alembic.gold)
         }
-        .buttonStyle(.bordered)
     }
 
     private var disableAccept: Bool {
