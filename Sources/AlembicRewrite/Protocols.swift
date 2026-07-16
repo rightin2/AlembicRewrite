@@ -73,6 +73,11 @@ public struct Style: Codable, Identifiable, Hashable, Sendable {
     /// Ascending display order in palette and settings.
     public var sortOrder: Int
     public var createdAt: Date
+    /// When `true`, a direct per-style hotkey opens the review panel (as the
+    /// palette route always does). When `false` (the default), a direct hotkey
+    /// runs the rewrite silently and pastes the result over the selection with
+    /// no panel. Palette-launched rewrites always show the panel regardless.
+    public var alwaysReview: Bool
 
     public init(
         id: UUID = UUID(),
@@ -83,7 +88,8 @@ public struct Style: Codable, Identifiable, Hashable, Sendable {
         temperature: Double,
         hotkey: Hotkey? = nil,
         sortOrder: Int,
-        createdAt: Date = Date()
+        createdAt: Date = Date(),
+        alwaysReview: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -94,6 +100,28 @@ public struct Style: Codable, Identifiable, Hashable, Sendable {
         self.hotkey = hotkey
         self.sortOrder = sortOrder
         self.createdAt = createdAt
+        self.alwaysReview = alwaysReview
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, name, promptTemplate, provider, model, temperature
+        case hotkey, sortOrder, createdAt, alwaysReview
+    }
+
+    /// Custom decoder so styles persisted before `alwaysReview` existed decode
+    /// cleanly, defaulting the missing field to `false`.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try c.decode(UUID.self, forKey: .id)
+        self.name = try c.decode(String.self, forKey: .name)
+        self.promptTemplate = try c.decode(String.self, forKey: .promptTemplate)
+        self.provider = try c.decode(Provider.self, forKey: .provider)
+        self.model = try c.decode(String.self, forKey: .model)
+        self.temperature = try c.decode(Double.self, forKey: .temperature)
+        self.hotkey = try c.decodeIfPresent(Hotkey.self, forKey: .hotkey)
+        self.sortOrder = try c.decode(Int.self, forKey: .sortOrder)
+        self.createdAt = try c.decode(Date.self, forKey: .createdAt)
+        self.alwaysReview = try c.decodeIfPresent(Bool.self, forKey: .alwaysReview) ?? false
     }
 }
 

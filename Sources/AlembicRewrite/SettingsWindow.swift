@@ -90,7 +90,7 @@ struct APIKeysTab: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Bootstrap key imported")
                                 .font(.headline)
-                            Text("An Anthropic key from .secrets/anthropic-key was imported into your Keychain on first launch. That key was exposed in chat — rotate it in the Anthropic console and paste the new key below.")
+                            Text("An Anthropic key from .secrets/anthropic-key was imported into local storage on first launch. That key was exposed in chat — rotate it in the Anthropic console and paste the new key below.")
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
                             Button("Dismiss") { env.setRotateBanner(false) }
@@ -107,7 +107,7 @@ struct APIKeysTab: View {
                     Button("Save") { save(.anthropic, key: anthropicKey, saved: &anthropicSaved) }
                         .disabled(anthropicKey.isEmpty)
                     if anthropicSaved {
-                        Label("Saved to Keychain", systemImage: "checkmark.circle.fill")
+                        Label("Saved", systemImage: "checkmark.circle.fill")
                             .foregroundStyle(Alembic.accent)
                             .font(.footnote)
                     }
@@ -127,7 +127,7 @@ struct APIKeysTab: View {
                     Button("Save") { save(.openai, key: openaiKey, saved: &openaiSaved) }
                         .disabled(openaiKey.isEmpty)
                     if openaiSaved {
-                        Label("Saved to Keychain", systemImage: "checkmark.circle.fill")
+                        Label("Saved", systemImage: "checkmark.circle.fill")
                             .foregroundStyle(Alembic.accent)
                             .font(.footnote)
                     }
@@ -142,7 +142,7 @@ struct APIKeysTab: View {
             }
 
             Section {
-                Text("Keys are stored only in the macOS Keychain and are sent solely to their provider's API. There is no telemetry.")
+                Text("Keys are stored in a private file in the app's Application Support folder, readable only by your user account, and are sent solely to their provider's API. There is no telemetry.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -324,6 +324,10 @@ struct StyleEditor: View {
 
             Section("Direct hotkey (optional)") {
                 HotkeyField(hotkey: $style.hotkey)
+                Toggle("Always show review panel", isOn: $style.alwaysReview)
+                Text("When off, this style's direct hotkey rewrites silently and pastes the result straight over your selection. When on, it opens the review panel. The palette always opens the review panel.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
 
             Section {

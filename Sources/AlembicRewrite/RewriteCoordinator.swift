@@ -51,6 +51,7 @@ final class RewriteCoordinator {
 
     private let paletteController = PaletteController()
     private let panelController = RewritePanelController()
+    private let hudController = HUDController()
 
     /// The in-flight capture/stream task, cancelled on new triggers, Cancel,
     /// Retry, Iterate and Accept.
@@ -126,11 +127,17 @@ final class RewriteCoordinator {
         paletteController.show(model: vm)
     }
 
-    /// Per-style direct hotkey: skip the palette, rewrite straight away.
+    /// Per-style direct hotkey: skip the palette. If the style opts into the
+    /// review panel it opens as usual; otherwise the rewrite runs silently and
+    /// the result is pasted straight over the selection.
     func handleStyleHotkey(styleID: UUID) {
         guard ensurePermission() else { return }
         guard let style = (try? env.styleStore.all())?.first(where: { $0.id == styleID }) else { return }
-        beginRewrite(style: style)
+        if style.alwaysReview {
+            beginRewrite(style: style)
+        } else {
+            beginSilentRewrite(style: style)
+        }
     }
 
     // MARK: - Rewrite pipeline
@@ -140,6 +147,7 @@ final class RewriteCoordinator {
         activeTask?.cancel()
         removeEmptyKeyMonitor()
         panelController.close()
+        hudController.close()
 
         let model = RewritePanelViewModel(styleName: style.name, phase: .streaming)
         wireCallbacks(model: model, style: style)
@@ -176,6 +184,126 @@ final class RewriteCoordinator {
 
             await self.runStream(style: style, model: model)
         }
+    }
+
+    // MARK: - Silent rewrite pipeline (no review panel)
+
+    /// Direct-hotkey rewrite with no panel: show a HUD, capture the selection,
+    /// stream the whole result in the background, then paste it over the
+    /// selection and log history + cost. Errors surface in the HUD.
+    private func beginSilentRewrite(style: Style) {
+        // Tear down anything already on screen so we never orphan a surface.
+        activeTask?.cancel()
+        removeEmptyKeyMonitor()
+        panelController.close()
+        hudController.close()
+
+        let hud = HUDViewModel()
+        hud.onCancel = { [weak self] in self?.cancelSilent() }
+        hud.onDismiss = { [weak self] in self?.hudController.close() }
+        hudController.show(model: hud)
+
+        activeTask = Task { [weak self] in
+            guard let self else { return }
+
+            // 1. Capture. SelectionService restores the clipboard in a defer.
+            let selection: String
+            do {
+                selection = try await self.env.selection.captureSelection()
+            } catch {
+                hud.showError("Could not read the selection. \(Self.describe(error))", sticky: true)
+                return
+            }
+            if Task.isCancelled { return }
+
+            // 2. Empty selection -> transient HUD error, auto-dismiss after ~3s.
+            guard !selection.isEmpty else {
+                hud.showError("No text selected", sticky: false)
+                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                if !Task.isCancelled { self.hudController.close() }
+                return
+            }
+
+            // 3. Read the BYOK key.
+            let apiKey: String
+            do {
+                guard let key = try self.env.keychain.key(for: style.provider), !key.isEmpty else {
+                    hud.showError("No API key set for \(style.provider.rawValue). Open Settings to add one.", sticky: true)
+                    return
+                }
+                apiKey = key
+            } catch {
+                hud.showError("Could not read the API key. \(Self.describe(error))", sticky: true)
+                return
+            }
+
+            // 4. Stream the whole result (no panel, no incremental display).
+            let prompt = Self.compose(template: style.promptTemplate, selection: selection)
+            let msgs = [ChatMessage(role: .user, content: prompt)]
+            let client = LLMClientFactory.client(for: style.provider)
+            let usage = UsageBox()
+            var result = ""
+            do {
+                let stream = client.stream(
+                    messages: msgs,
+                    model: style.model,
+                    temperature: style.temperature,
+                    apiKey: apiKey,
+                    onUsage: { input, output in usage.set(input: input, output: output) }
+                )
+                for try await delta in stream {
+                    try Task.checkCancellation()
+                    result += delta
+                }
+            } catch is CancellationError {
+                return
+            } catch {
+                hud.showError(Self.describe(error), sticky: true)
+                return
+            }
+
+            if Task.isCancelled { return }
+            guard !result.isEmpty else {
+                hud.showError("The model returned no text.", sticky: true)
+                return
+            }
+
+            // 5. Hide the HUD, then paste over the selection.
+            self.hudController.close()
+            do {
+                try await self.env.selection.replaceSelection(with: result)
+            } catch {
+                NSLog("AlembicRewrite: silent paste failed: \(error)")
+            }
+
+            // 6. Log history + fold cost.
+            let value = usage.value
+            let entry = HistoryEntry(
+                original: selection,
+                result: result,
+                styleName: style.name,
+                provider: style.provider,
+                model: style.model,
+                inputTokens: value?.input ?? 0,
+                outputTokens: value?.output ?? 0
+            )
+            try? self.env.historyStore.add(entry)
+            if let value {
+                try? self.env.costMeter.record(UsageRecord(
+                    provider: style.provider,
+                    model: style.model,
+                    inputTokens: value.input,
+                    outputTokens: value.output
+                ))
+            }
+            self.env.bumpRefresh()
+        }
+    }
+
+    private func cancelSilent() {
+        activeTask?.cancel()
+        activeTask = nil
+        hudController.close()
     }
 
     /// Stream `messages` from the style's backend into `model`.
@@ -290,6 +418,7 @@ final class RewriteCoordinator {
         activeTask = nil
         removeEmptyKeyMonitor()
         panelController.close()
+        hudController.close()
     }
 
     // MARK: - Permission gate

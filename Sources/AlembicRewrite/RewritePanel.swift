@@ -217,14 +217,22 @@ public struct RewritePanelView: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(spacing: 0) {
             header
-            originalPane
-            rewritePane
-            iterateField
+                .padding(.horizontal, 18)
+                .padding(.vertical, 14)
+            hairline
+            VStack(alignment: .leading, spacing: 16) {
+                originalPane
+                rewritePane
+                iterateField
+            }
+            .padding(18)
+            hairline
             actionRow
+                .padding(.horizontal, 18)
+                .padding(.vertical, 14)
         }
-        .padding(18)
         .frame(width: 520)
         .frame(minHeight: 360)
         .background(VisualEffectBackground())
@@ -233,11 +241,14 @@ public struct RewritePanelView: View {
             RoundedRectangle(cornerRadius: AlembicMetrics.radius, style: .continuous)
                 .strokeBorder(Alembic.border.opacity(0.6), lineWidth: AlembicMetrics.hairline)
         )
-        .overlay(alignment: .topTrailing) {
-            closeButton
-                .padding(10)
-        }
         .tint(Alembic.accent)
+    }
+
+    /// Full-width hairline divider between the header, body, and action row.
+    private var hairline: some View {
+        Rectangle()
+            .fill(Alembic.border.opacity(0.6))
+            .frame(height: AlembicMetrics.hairline)
     }
 
     /// Small circular ✕ that cancels any in-flight stream and closes the panel,
@@ -268,8 +279,11 @@ public struct RewritePanelView: View {
             Text(model.styleName.isEmpty ? "Rewrite" : model.styleName)
                 .font(.alembicDisplay(17))
                 .foregroundStyle(Alembic.ink)
-            Spacer()
+                .lineLimit(1)
+                .truncationMode(.tail)
+            Spacer(minLength: 12)
             statusBadge
+            closeButton
         }
     }
 
@@ -300,17 +314,25 @@ public struct RewritePanelView: View {
         }
     }
 
+    /// Section label with the standard 6pt gap above its content.
+    private func sectionLabel(_ text: String) -> some View {
+        Text(text)
+            .font(.caption2.weight(.semibold))
+            .tracking(0.6)
+            .foregroundStyle(.secondary)
+    }
+
     private var originalPane: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("ORIGINAL")
-                .font(.caption2.weight(.semibold))
-                .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 6) {
+            sectionLabel("ORIGINAL")
             ScrollView {
                 Text(model.original.isEmpty ? "—" : model.original)
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .textSelection(.enabled)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 2)
+                    .padding(.vertical, 2)
             }
             .frame(maxHeight: 90)
         }
@@ -318,12 +340,13 @@ public struct RewritePanelView: View {
 
     @ViewBuilder
     private var rewritePane: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("REWRITE")
-                .font(.caption2.weight(.semibold))
-                .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 6) {
+            sectionLabel("REWRITE")
             ScrollViewReader { proxy in
                 ScrollView {
+                    // Top anchor so the view can pin to the start when a fresh
+                    // stream begins, before following the tail as tokens arrive.
+                    Color.clear.frame(height: 0).id("rewrite-top")
                     Group {
                         if case .error(let message) = model.phase {
                             errorBody(message)
@@ -340,9 +363,18 @@ public struct RewritePanelView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
+                    .padding(.horizontal, 2)
+                    .padding(.vertical, 2)
                     .id("rewrite-bottom")
                 }
                 .frame(minHeight: 120, maxHeight: 220)
+                .onChange(of: model.phase) { newPhase in
+                    // Pin to the top the moment a new stream starts, so the
+                    // first tokens are never rendered mid-scroll.
+                    if newPhase == .streaming && model.rewrite.isEmpty {
+                        proxy.scrollTo("rewrite-top", anchor: .top)
+                    }
+                }
                 .onChange(of: model.rewrite) { _ in
                     withAnimation(.linear(duration: 0.1)) {
                         proxy.scrollTo("rewrite-bottom", anchor: .bottom)

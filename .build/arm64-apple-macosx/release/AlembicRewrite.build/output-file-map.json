@@ -88,6 +88,12 @@
     "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/RewriteCoordinator.swiftdeps",
     "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/RewriteCoordinator.dia"
   },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteHUD.swift": {
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/RewriteHUD.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/RewriteHUD~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/RewriteHUD.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/RewriteHUD.dia"
+  },
   "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewritePanel.swift": {
     "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/RewritePanel.swift.o",
     "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/RewritePanel~partial.swiftmodule",

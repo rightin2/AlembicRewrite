@@ -291,6 +291,78 @@ final class DataTests: XCTestCase {
         XCTAssertEqual(m2.totalCostUSD(), 2.5, accuracy: 1e-9)
     }
 
+    // MARK: - Style.alwaysReview decoding default
+
+    func testStyleDecodesMissingAlwaysReviewAsFalse() throws {
+        // JSON as persisted before `alwaysReview` existed (no such key).
+        let json = """
+        {
+          "id": "\(UUID().uuidString)",
+          "name": "Legacy",
+          "promptTemplate": "{{selection}}",
+          "provider": "anthropic",
+          "model": "claude-haiku-4-5",
+          "temperature": 0.3,
+          "sortOrder": 0,
+          "createdAt": "2026-07-16T00:00:00Z"
+        }
+        """
+        let dec = JSONFile.makeDecoder()
+        let style = try dec.decode(Style.self, from: Data(json.utf8))
+        XCTAssertFalse(style.alwaysReview)
+    }
+
+    func testStyleAlwaysReviewRoundTrips() throws {
+        var style = Style(name: "R", promptTemplate: "{{selection}}", provider: .openai, model: "gpt-4o", temperature: 0.5, sortOrder: 0)
+        style.alwaysReview = true
+        let data = try JSONFile.makeEncoder().encode(style)
+        let back = try JSONFile.makeDecoder().decode(Style.self, from: data)
+        XCTAssertTrue(back.alwaysReview)
+    }
+
+    func testStyleStoreRoundTripsAlwaysReview() throws {
+        let store = StyleStore(directory: tmpDir)
+        var style = Style(name: "Silent", promptTemplate: "{{selection}}", provider: .anthropic, model: "claude-haiku-4-5", temperature: 0.3, sortOrder: 0)
+        style.alwaysReview = true
+        try store.save(style)
+        let reloaded = try XCTUnwrap(StyleStore(directory: tmpDir).all().first)
+        XCTAssertTrue(reloaded.alwaysReview)
+    }
+
+    // MARK: - KeychainStore (file-backed)
+
+    func testKeychainStoreRoundTrip() throws {
+        let store = KeychainStore(directory: tmpDir)
+        XCTAssertNil(try store.key(for: .anthropic))
+        try store.setKey("sk-ant-123", for: .anthropic)
+        try store.setKey("sk-oai-456", for: .openai)
+        XCTAssertEqual(try store.key(for: .anthropic), "sk-ant-123")
+        XCTAssertEqual(try store.key(for: .openai), "sk-oai-456")
+    }
+
+    func testKeychainStoreUpdateAndDelete() throws {
+        let store = KeychainStore(directory: tmpDir)
+        try store.setKey("first", for: .anthropic)
+        try store.setKey("second", for: .anthropic)
+        XCTAssertEqual(try store.key(for: .anthropic), "second")
+        try store.deleteKey(for: .anthropic)
+        XCTAssertNil(try store.key(for: .anthropic))
+    }
+
+    func testKeychainStorePersistsAcrossInstances() throws {
+        try KeychainStore(directory: tmpDir).setKey("persist", for: .openai)
+        XCTAssertEqual(try KeychainStore(directory: tmpDir).key(for: .openai), "persist")
+    }
+
+    func testKeychainStoreFilePermissionsAreOwnerOnly() throws {
+        let store = KeychainStore(directory: tmpDir)
+        try store.setKey("secret", for: .anthropic)
+        let fileURL = tmpDir.appendingPathComponent("credentials.json")
+        let attrs = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+        let perms = try XCTUnwrap(attrs[.posixPermissions] as? NSNumber)
+        XCTAssertEqual(perms.int16Value, 0o600)
+    }
+
     // MARK: - Helpers
 
     private func makeEntry(result: String, at date: Date) -> HistoryEntry {

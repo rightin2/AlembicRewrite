@@ -125,6 +125,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteHUD.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewritePanel.swift"
         },
         {
@@ -174,6 +178,7 @@
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/PriceTable.swift.o",
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Protocols.swift.o",
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteCoordinator.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteHUD.swift.o",
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewritePanel.swift.o",
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SelectionService.swift.o",
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SettingsWindow.swift.o",
@@ -289,6 +294,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteHUD.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewritePanel.swift.o"
         },
         {
@@ -328,6 +337,7 @@
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/PriceTable.swift",
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Protocols.swift",
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteCoordinator.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteHUD.swift",
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewritePanel.swift",
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SelectionService.swift",
         "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SettingsWindow.swift",
@@ -562,6 +572,7 @@
       "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/PriceTable.swift",
       "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Protocols.swift",
       "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteCoordinator.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteHUD.swift",
       "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewritePanel.swift",
       "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SelectionService.swift",
       "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SettingsWindow.swift",
@@ -853,6 +864,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteHUD.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewritePanel.swift"
         },
         {
@@ -936,6 +951,10 @@
         {
           "kind" : "file",
           "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteCoordinator.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteHUD.swift.o"
         },
         {
           "kind" : "file",
@@ -1036,6 +1055,10 @@
         {
           "kind" : "file",
           "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteCoordinator.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteHUD.swift.o"
         },
         {
           "kind" : "file",
