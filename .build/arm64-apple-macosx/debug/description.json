@@ -1,9 +1,9 @@
 {
   "builtTestProducts" : [
     {
-      "binaryPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.xctest/Contents/MacOS/PromptRewriterPackageTests",
+      "binaryPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.xctest/Contents/MacOS/AlembicRewritePackageTests",
       "packagePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter",
-      "productName" : "PromptRewriterPackageTests"
+      "productName" : "AlembicRewritePackageTests"
     }
   ],
   "copyCommands" : {
@@ -21,78 +21,78 @@
 
   ],
   "swiftCommands" : {
-    "C.PromptRewriter-arm64-apple-macosx-debug.module" : {
+    "C.AlembicRewrite-arm64-apple-macosx-debug.module" : {
       "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
-      "fileList" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/sources",
+      "fileList" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/sources",
       "importPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules",
       "inputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/AnthropicClient.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/AnthropicClient.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/App.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/App.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/CostMeter.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/CostMeter.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HistoryStore.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HistoryStore.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HotkeyManager.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HotkeyManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/KeychainStore.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/KeychainStore.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/LLMClient.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/LLMClient.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Onboarding.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Onboarding.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/OpenAIClient.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/OpenAIClient.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Palette.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Palette.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/PriceTable.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/PriceTable.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Protocols.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Protocols.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewriteCoordinator.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteCoordinator.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewritePanel.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewritePanel.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SelectionService.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SelectionService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SettingsWindow.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SettingsWindow.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/StyleStore.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/StyleStore.swift"
         },
         {
           "kind" : "file",
@@ -100,30 +100,30 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/sources"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/sources"
         }
       ],
       "isLibrary" : false,
-      "moduleName" : "PromptRewriter",
-      "moduleOutputPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/PromptRewriter.swiftmodule",
+      "moduleName" : "AlembicRewrite",
+      "moduleOutputPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/AlembicRewrite.swiftmodule",
       "objects" : [
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/AnthropicClient.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/App.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/CostMeter.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HistoryStore.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HotkeyManager.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/KeychainStore.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/LLMClient.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Onboarding.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/OpenAIClient.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Palette.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/PriceTable.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Protocols.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewriteCoordinator.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewritePanel.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SelectionService.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SettingsWindow.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/StyleStore.swift.o"
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/AnthropicClient.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/App.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/CostMeter.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HistoryStore.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HotkeyManager.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/KeychainStore.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/LLMClient.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Onboarding.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/OpenAIClient.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Palette.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/PriceTable.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Protocols.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteCoordinator.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewritePanel.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SelectionService.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SettingsWindow.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/StyleStore.swift.o"
       ],
       "otherArguments" : [
         "-target",
@@ -145,7 +145,7 @@
         "-Xfrontend",
         "-entry-point-function-name",
         "-Xfrontend",
-        "PromptRewriter_main",
+        "AlembicRewrite_main",
         "-swift-version",
         "5",
         "-plugin-path",
@@ -174,112 +174,112 @@
         "-package-name",
         "prompt_rewriter"
       ],
-      "outputFileMapPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/output-file-map.json",
+      "outputFileMapPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/output-file-map.json",
       "outputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/AnthropicClient.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/AnthropicClient.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/App.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/App.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/CostMeter.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/CostMeter.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HistoryStore.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HistoryStore.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HotkeyManager.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HotkeyManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/KeychainStore.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/KeychainStore.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/LLMClient.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/LLMClient.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Onboarding.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Onboarding.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/OpenAIClient.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/OpenAIClient.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Palette.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Palette.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/PriceTable.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/PriceTable.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Protocols.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Protocols.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewriteCoordinator.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteCoordinator.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewritePanel.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewritePanel.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SelectionService.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SelectionService.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SettingsWindow.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SettingsWindow.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/StyleStore.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/StyleStore.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/PromptRewriter.swiftmodule"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/AlembicRewrite.swiftmodule"
         }
       ],
       "prepareForIndexing" : false,
       "sources" : [
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/AnthropicClient.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/App.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/CostMeter.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HistoryStore.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HotkeyManager.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/KeychainStore.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/LLMClient.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Onboarding.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/OpenAIClient.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Palette.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/PriceTable.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Protocols.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewriteCoordinator.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewritePanel.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SelectionService.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SettingsWindow.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/StyleStore.swift"
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/AnthropicClient.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/App.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/CostMeter.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HistoryStore.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HotkeyManager.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/KeychainStore.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/LLMClient.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Onboarding.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/OpenAIClient.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Palette.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/PriceTable.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Protocols.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteCoordinator.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewritePanel.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SelectionService.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SettingsWindow.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/StyleStore.swift"
       ],
-      "tempsPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build",
+      "tempsPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build",
       "wholeModuleOptimization" : false
     },
-    "C.PromptRewriterPackageTests-arm64-apple-macosx-debug.module" : {
+    "C.AlembicRewritePackageTests-arm64-apple-macosx-debug.module" : {
       "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
-      "fileList" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build/sources",
+      "fileList" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/sources",
       "importPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules",
       "inputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.derived/runner.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.derived/runner.swift"
         },
         {
           "kind" : "file",
@@ -287,18 +287,18 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/PromptRewriterTests.swiftmodule"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/AlembicRewriteTests.swiftmodule"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build/sources"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/sources"
         }
       ],
       "isLibrary" : true,
-      "moduleName" : "PromptRewriterPackageTests",
-      "moduleOutputPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/PromptRewriterPackageTests.swiftmodule",
+      "moduleName" : "AlembicRewritePackageTests",
+      "moduleOutputPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/AlembicRewritePackageTests.swiftmodule",
       "objects" : [
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build/runner.swift.o"
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/runner.swift.o"
       ],
       "otherArguments" : [
         "-target",
@@ -322,7 +322,7 @@
         "-parse-as-library",
         "-emit-objc-header",
         "-emit-objc-header-path",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build/include/PromptRewriterPackageTests-Swift.h",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/include/AlembicRewritePackageTests-Swift.h",
         "-plugin-path",
         "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
         "-sdk",
@@ -349,36 +349,36 @@
         "-package-name",
         "prompt_rewriter"
       ],
-      "outputFileMapPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build/output-file-map.json",
+      "outputFileMapPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/output-file-map.json",
       "outputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build/runner.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/runner.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/PromptRewriterPackageTests.swiftmodule"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/AlembicRewritePackageTests.swiftmodule"
         }
       ],
       "prepareForIndexing" : false,
       "sources" : [
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.derived/runner.swift"
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.derived/runner.swift"
       ],
-      "tempsPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build",
+      "tempsPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build",
       "wholeModuleOptimization" : false
     },
-    "C.PromptRewriterTests-arm64-apple-macosx-debug.module" : {
+    "C.AlembicRewriteTests-arm64-apple-macosx-debug.module" : {
       "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
-      "fileList" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/sources",
+      "fileList" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/sources",
       "importPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules",
       "inputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/PromptRewriterTests/DataTests.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/AlembicRewriteTests/DataTests.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/PromptRewriterTests/PlaceholderTests.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/AlembicRewriteTests/PlaceholderTests.swift"
         },
         {
           "kind" : "file",
@@ -386,19 +386,19 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/sources"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/sources"
         }
       ],
       "isLibrary" : true,
-      "moduleName" : "PromptRewriterTests",
-      "moduleOutputPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/PromptRewriterTests.swiftmodule",
+      "moduleName" : "AlembicRewriteTests",
+      "moduleOutputPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/AlembicRewriteTests.swiftmodule",
       "objects" : [
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/DataTests.swift.o",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/PlaceholderTests.swift.o"
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/DataTests.swift.o",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/PlaceholderTests.swift.o"
       ],
       "otherArguments" : [
         "-target",
@@ -448,27 +448,27 @@
         "-package-name",
         "prompt_rewriter"
       ],
-      "outputFileMapPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/output-file-map.json",
+      "outputFileMapPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/output-file-map.json",
       "outputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/DataTests.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/DataTests.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/PlaceholderTests.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/PlaceholderTests.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/PromptRewriterTests.swiftmodule"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules/AlembicRewriteTests.swiftmodule"
         }
       ],
       "prepareForIndexing" : false,
       "sources" : [
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/PromptRewriterTests/DataTests.swift",
-        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/PromptRewriterTests/PlaceholderTests.swift"
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/AlembicRewriteTests/DataTests.swift",
+        "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/AlembicRewriteTests/PlaceholderTests.swift"
       ],
-      "tempsPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build",
+      "tempsPath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build",
       "wholeModuleOptimization" : false
     }
   },
@@ -476,30 +476,30 @@
 
   },
   "swiftTargetScanArgs" : {
-    "PromptRewriter" : [
+    "AlembicRewrite" : [
       "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "-module-name",
-      "PromptRewriter",
+      "AlembicRewrite",
       "-package-name",
       "prompt_rewriter",
       "-c",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/AnthropicClient.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/App.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/CostMeter.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HistoryStore.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HotkeyManager.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/KeychainStore.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/LLMClient.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Onboarding.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/OpenAIClient.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Palette.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/PriceTable.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Protocols.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewriteCoordinator.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewritePanel.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SelectionService.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SettingsWindow.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/StyleStore.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/AnthropicClient.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/App.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/CostMeter.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HistoryStore.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HotkeyManager.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/KeychainStore.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/LLMClient.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Onboarding.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/OpenAIClient.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Palette.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/PriceTable.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Protocols.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteCoordinator.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewritePanel.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SelectionService.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SettingsWindow.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/StyleStore.swift",
       "-I",
       "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules",
       "-target",
@@ -521,7 +521,7 @@
       "-Xfrontend",
       "-entry-point-function-name",
       "-Xfrontend",
-      "PromptRewriter_main",
+      "AlembicRewrite_main",
       "-swift-version",
       "5",
       "-plugin-path",
@@ -552,14 +552,14 @@
       "-driver-use-frontend-path",
       "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
     ],
-    "PromptRewriterPackageTests" : [
+    "AlembicRewritePackageTests" : [
       "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "-module-name",
-      "PromptRewriterPackageTests",
+      "AlembicRewritePackageTests",
       "-package-name",
       "prompt_rewriter",
       "-c",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.derived/runner.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.derived/runner.swift",
       "-I",
       "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules",
       "-target",
@@ -583,7 +583,7 @@
       "-parse-as-library",
       "-emit-objc-header",
       "-emit-objc-header-path",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build/include/PromptRewriterPackageTests-Swift.h",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/include/AlembicRewritePackageTests-Swift.h",
       "-plugin-path",
       "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
       "-sdk",
@@ -612,15 +612,15 @@
       "-driver-use-frontend-path",
       "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
     ],
-    "PromptRewriterTests" : [
+    "AlembicRewriteTests" : [
       "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "-module-name",
-      "PromptRewriterTests",
+      "AlembicRewriteTests",
       "-package-name",
       "prompt_rewriter",
       "-c",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/PromptRewriterTests/DataTests.swift",
-      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/PromptRewriterTests/PlaceholderTests.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/AlembicRewriteTests/DataTests.swift",
+      "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/AlembicRewriteTests/PlaceholderTests.swift",
       "-I",
       "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/Modules",
       "-target",
@@ -674,29 +674,29 @@
     ]
   },
   "targetDependencyMap" : {
-    "PromptRewriter" : [
+    "AlembicRewrite" : [
 
     ],
-    "PromptRewriterPackageTests" : [
-      "PromptRewriterTests",
-      "PromptRewriter"
+    "AlembicRewritePackageTests" : [
+      "AlembicRewriteTests",
+      "AlembicRewrite"
     ],
-    "PromptRewriterTests" : [
-      "PromptRewriter"
+    "AlembicRewriteTests" : [
+      "AlembicRewrite"
     ]
   },
   "testDiscoveryCommands" : {
 
   },
   "testEntryPointCommands" : {
-    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.derived/runner.swift" : {
+    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.derived/runner.swift" : {
       "inputs" : [
 
       ],
       "outputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.derived/runner.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.derived/runner.swift"
         }
       ]
     }
@@ -707,7 +707,7 @@
     }
   },
   "writeCommands" : {
-    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter-entitlement.plist" : {
+    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite-entitlement.plist" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
         {
@@ -719,9 +719,9 @@
           "name" : "<com.apple.security.get-task-allow>"
         }
       ],
-      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter-entitlement.plist"
+      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite-entitlement.plist"
     },
-    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/sources" : {
+    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/sources" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
         {
@@ -730,76 +730,76 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/AnthropicClient.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/AnthropicClient.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/App.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/App.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/CostMeter.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/CostMeter.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HistoryStore.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HistoryStore.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HotkeyManager.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HotkeyManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/KeychainStore.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/KeychainStore.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/LLMClient.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/LLMClient.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Onboarding.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Onboarding.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/OpenAIClient.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/OpenAIClient.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Palette.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Palette.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/PriceTable.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/PriceTable.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Protocols.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Protocols.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewriteCoordinator.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteCoordinator.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewritePanel.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewritePanel.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SelectionService.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SelectionService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SettingsWindow.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SettingsWindow.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/StyleStore.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/StyleStore.swift"
         }
       ],
-      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/sources"
+      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/sources"
     },
-    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.product/Objects.LinkFileList" : {
+    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.product/Objects.LinkFileList" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
         {
@@ -808,76 +808,76 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/AnthropicClient.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/AnthropicClient.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/App.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/App.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/CostMeter.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/CostMeter.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HistoryStore.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HistoryStore.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HotkeyManager.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HotkeyManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/KeychainStore.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/KeychainStore.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/LLMClient.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/LLMClient.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Onboarding.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Onboarding.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/OpenAIClient.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/OpenAIClient.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Palette.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Palette.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/PriceTable.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/PriceTable.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Protocols.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Protocols.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewriteCoordinator.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteCoordinator.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewritePanel.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewritePanel.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SelectionService.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SelectionService.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SettingsWindow.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SettingsWindow.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/StyleStore.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/StyleStore.swift.o"
         }
       ],
-      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.product/Objects.LinkFileList"
+      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.product/Objects.LinkFileList"
     },
-    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build/sources" : {
+    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/sources" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
         {
@@ -886,12 +886,12 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.derived/runner.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.derived/runner.swift"
         }
       ],
-      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build/sources"
+      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/sources"
     },
-    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.product/Objects.LinkFileList" : {
+    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.product/Objects.LinkFileList" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
         {
@@ -900,88 +900,88 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/AnthropicClient.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/AnthropicClient.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/App.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/App.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/CostMeter.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/CostMeter.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HistoryStore.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HistoryStore.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HotkeyManager.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HotkeyManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/KeychainStore.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/KeychainStore.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/LLMClient.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/LLMClient.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Onboarding.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Onboarding.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/OpenAIClient.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/OpenAIClient.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Palette.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Palette.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/PriceTable.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/PriceTable.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Protocols.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Protocols.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewriteCoordinator.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewriteCoordinator.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewritePanel.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/RewritePanel.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SelectionService.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SelectionService.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SettingsWindow.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/SettingsWindow.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/StyleStore.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/StyleStore.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.build/runner.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/runner.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/DataTests.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/DataTests.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/PlaceholderTests.swift.o"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/PlaceholderTests.swift.o"
         }
       ],
-      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterPackageTests.product/Objects.LinkFileList"
+      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.product/Objects.LinkFileList"
     },
-    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/sources" : {
+    "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/sources" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
         {
@@ -990,14 +990,14 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/PromptRewriterTests/DataTests.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/AlembicRewriteTests/DataTests.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/PromptRewriterTests/PlaceholderTests.swift"
+          "name" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/AlembicRewriteTests/PlaceholderTests.swift"
         }
       ],
-      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriterTests.build/sources"
+      "outputFilePath" : "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/sources"
     },
     "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt" : {
       "alwaysOutOfDate" : true,

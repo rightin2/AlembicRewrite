@@ -1,0 +1,17 @@
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/AnthropicClient.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/App.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/CostMeter.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HistoryStore.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/HotkeyManager.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/KeychainStore.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/LLMClient.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Onboarding.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/OpenAIClient.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Palette.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/PriceTable.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Protocols.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewriteCoordinator.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/RewritePanel.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SelectionService.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/SettingsWindow.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/StyleStore.swift
