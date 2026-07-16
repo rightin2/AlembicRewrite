@@ -1,0 +1,13 @@
+{
+  "": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/PromptRewriterPackageTests.build/PromptRewriterPackageTests.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/PromptRewriterPackageTests.build/PromptRewriterPackageTests.o",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/PromptRewriterPackageTests.build/primary.swiftdeps"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/PromptRewriterPackageTests.derived/runner.swift": {
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/PromptRewriterPackageTests.build/runner.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/PromptRewriterPackageTests.build/runner~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/PromptRewriterPackageTests.build/runner.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/PromptRewriterPackageTests.build/runner.dia"
+  }
+}

@@ -1,0 +1,17 @@
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/AnthropicClient.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/App.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/CostMeter.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HistoryStore.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HotkeyManager.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/KeychainStore.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/LLMClient.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Onboarding.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/OpenAIClient.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Palette.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/PriceTable.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Protocols.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewriteCoordinator.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewritePanel.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SelectionService.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SettingsWindow.swift
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/StyleStore.swift

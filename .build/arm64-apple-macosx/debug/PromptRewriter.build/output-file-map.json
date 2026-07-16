@@ -1,0 +1,124 @@
+{
+  "": {
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/primary.swiftdeps"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/AnthropicClient.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/AnthropicClient.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/AnthropicClient.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/AnthropicClient~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/AnthropicClient.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/AnthropicClient.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/App.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/App.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/App.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/App~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/App.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/App.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/CostMeter.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/CostMeter.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/CostMeter.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/CostMeter~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/CostMeter.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/CostMeter.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HistoryStore.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HistoryStore.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HistoryStore.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HistoryStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HistoryStore.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HistoryStore.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/HotkeyManager.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HotkeyManager.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HotkeyManager.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HotkeyManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HotkeyManager.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/HotkeyManager.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/KeychainStore.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/KeychainStore.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/KeychainStore.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/KeychainStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/KeychainStore.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/KeychainStore.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/LLMClient.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/LLMClient.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/LLMClient.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/LLMClient~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/LLMClient.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/LLMClient.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Onboarding.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Onboarding.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Onboarding.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Onboarding~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Onboarding.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Onboarding.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/OpenAIClient.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/OpenAIClient.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/OpenAIClient.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/OpenAIClient~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/OpenAIClient.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/OpenAIClient.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Palette.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Palette.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Palette.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Palette~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Palette.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Palette.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/PriceTable.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/PriceTable.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/PriceTable.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/PriceTable~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/PriceTable.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/PriceTable.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/Protocols.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Protocols.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Protocols.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Protocols~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Protocols.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/Protocols.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewriteCoordinator.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewriteCoordinator.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewriteCoordinator.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewriteCoordinator~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewriteCoordinator.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewriteCoordinator.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/RewritePanel.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewritePanel.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewritePanel.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewritePanel~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewritePanel.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/RewritePanel.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SelectionService.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SelectionService.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SelectionService.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SelectionService~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SelectionService.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SelectionService.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/SettingsWindow.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SettingsWindow.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SettingsWindow.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SettingsWindow~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SettingsWindow.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/SettingsWindow.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/PromptRewriter/StyleStore.swift": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/StyleStore.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/StyleStore.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/StyleStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/StyleStore.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/PromptRewriter.build/StyleStore.dia"
+  }
+}
