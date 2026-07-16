@@ -44,10 +44,13 @@ public final class SelectionService: SelectionServicing {
         // Always restore the caller's clipboard, whatever happens below.
         defer { restore(saved, to: pasteboard) }
 
-        let beforeCount = pasteboard.changeCount
         // Clear so a stale value can't masquerade as a fresh copy if the app
         // never answers (some apps leave the pasteboard untouched on empty copy).
+        // The baseline MUST be read after the clear: clearContents() itself
+        // increments changeCount, so a baseline taken before it makes the wait
+        // return immediately with an empty pasteboard.
         pasteboard.clearContents()
+        let beforeCount = pasteboard.changeCount
 
         postCommandKeystroke(keyC)
 
