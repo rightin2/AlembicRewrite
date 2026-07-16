@@ -262,7 +262,7 @@ struct StylesTab: View {
             name: "New Style",
             promptTemplate: "Rewrite the following text.\n\n{{selection}}",
             provider: .anthropic,
-            model: "claude-3-5-sonnet-latest",
+            model: "claude-haiku-4-5",
             temperature: 0.7,
             sortOrder: nextOrder
         )
