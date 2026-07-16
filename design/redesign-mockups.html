@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AlembicRewrite - Liquid-Glass Redesign Mockups</title>
+<style>
+  :root{
+    --accent:#4a6741; --accent-vibrant:#5d8a50; --accent-soft:#c8d9c3; --accent-text:#3F5A35;
+    --on-accent:#f0ece6; --gold:#d9b23f; --warning:#b67a2a; --warning-text:#8F5F1E;
+    --danger:#c8392f; --paper-tint:#f4f1ea; --ink-base:#2b2622; --muted:#6E6B65;
+    --surface-2:#fafaf8; --surface-3:#f0ece4; --border:rgba(0,0,0,0.14);
+    --radius-1:6px; --radius-2:8px; --radius-3:12px;
+    --shadow-1:0 1px 4px rgba(0,0,0,0.04);
+    --shadow-2:0 4px 16px rgba(0,0,0,0.12);
+    --shadow-3:0 12px 48px rgba(0,0,0,0.18);
+    --glass-rim:rgba(255,255,255,0.55);
+    --glass-top:rgba(255,255,255,0.60);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'DM Sans',-apple-system,'Segoe UI',sans-serif;
+    color:var(--ink-base);
+    /* warm-dark wallpaper so glass has something to show through */
+    background:
+      radial-gradient(1200px 700px at 75% 15%, #7a3d1e 0%, transparent 55%),
+      radial-gradient(900px 600px at 20% 80%, #3d2c14 0%, transparent 60%),
+      linear-gradient(160deg, #241a10 0%, #4a2c12 45%, #191410 100%);
+    background-attachment:fixed;
+    min-height:100vh;
+    padding:40px 30px 80px;
+  }
+  .page-head{max-width:1160px;margin:0 auto 34px;color:#f3ede4}
+  .page-head h1{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:30px;letter-spacing:-0.01em;
+    text-shadow:0 1px 3px rgba(0,0,0,.75),0 1px 12px rgba(0,0,0,.55)}
+  .page-head p{font-size:13px;color:#e6ddd0;margin-top:8px;max-width:760px;line-height:1.6;
+    text-shadow:0 1px 3px rgba(0,0,0,.6)}
+  .kicker{font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#e9b877;
+    text-shadow:0 1px 4px rgba(0,0,0,.7);margin-bottom:6px}
+
+  .screen{max-width:1160px;margin:0 auto 52px}
+  .screen > h2{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:20px;color:#f3ede4;
+    margin-bottom:4px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .screen > .sub{font-size:12px;color:#e6ddd0;margin-bottom:20px;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+  @media (max-width:880px){.ba{grid-template-columns:1fr}}
+  .col-label{font-size:9.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+    margin-bottom:10px;color:#e6ddd0;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+  .col-label.after{color:#a9d69a}
+
+  /* ---- BEFORE frame: flat, cool, generic macOS ---- */
+  .before-frame{
+    background:#ececec;border:1px solid #cfcfcf;border-radius:8px;
+    box-shadow:0 6px 20px rgba(0,0,0,.30);overflow:hidden;
+  }
+  .before-frame.dark{background:#2b2b2b;border-color:#444}
+
+  /* ---- AFTER frame: liquid glass smoke card ---- */
+  .glass{
+    background:color-mix(in srgb, var(--paper-tint) 58%, transparent);
+    border:1px solid var(--glass-rim);
+    box-shadow:
+      inset 0 1px 0 var(--glass-top),
+      inset 0 0 40px rgba(255,255,255,0.12),
+      0 10px 30px rgba(0,0,0,0.22);
+    -webkit-backdrop-filter:blur(22px) saturate(1.25);
+    backdrop-filter:blur(22px) saturate(1.25);
+    border-radius:var(--radius-3);
+    position:relative;
+  }
+  /* asymmetric specular rim: top full + left half */
+  .glass::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.6), inset 1px 0 0 rgba(255,255,255,.28);
+  }
+  .clear-glass{
+    background:rgba(255,255,255,0.55);
+    -webkit-backdrop-filter:blur(12px) saturate(1.3);backdrop-filter:blur(12px) saturate(1.3);
+    border:1px solid rgba(255,255,255,0.25);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 4px 16px rgba(0,0,0,.06);
+    border-radius:var(--radius-2);
+  }
+
+  /* shared typographic bits */
+  .wtitle{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:15px}
+  .microlabel{font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .badge{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:5px}
+  .badge.ready{background:var(--accent-soft);color:var(--accent-text)}
+  .badge.stream{background:#e6ddcb;color:var(--warning-text)}
+  .field{background:color-mix(in srgb,#fff 92%,var(--paper-tint));border:1px solid rgba(0,0,0,.18);
+    border-radius:var(--radius-2);padding:8px 10px;font-size:12.5px;color:var(--ink-base)}
+  .btn{font-size:12.5px;font-weight:600;border-radius:var(--radius-2);padding:8px 14px;min-height:32px;
+    border:none;cursor:default;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+  .btn-primary{background:var(--accent);color:var(--on-accent)}
+  .btn-smoke{background:color-mix(in srgb,var(--paper-tint) 70%,transparent);
+    border:1px solid var(--glass-rim);box-shadow:inset 0 1px 0 rgba(255,255,255,.4);color:var(--ink-base)}
+  .btn-gold{background:var(--gold);color:#3a2e08}
+  .btn-focus{position:relative}
+  .btn-focus::after{content:"";position:absolute;inset:-2px;border-radius:10px;
+    box-shadow:0 0 0 2px var(--accent-vibrant),0 0 0 4px rgba(255,255,255,.9)}
+
+  /* palette rows */
+  .prow{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--radius-1);font-size:13px}
+  .prow .g{width:16px;text-align:center;color:var(--accent-text);font-weight:700}
+  .prow .nm{flex:1}
+  .prow .md{font-size:10px;color:var(--muted)}
+  .prow .hk{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;color:var(--muted)}
+  .prow.sel{background:var(--accent);color:#fff}
+  .prow.sel .g,.prow.sel .md,.prow.sel .hk{color:rgba(255,255,255,.85)}
+
+  /* BEFORE generic bits */
+  .b-row{display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:13px;color:#222}
+  .b-row.sel{background:#3478f6;color:#fff}
+  .b-head{font-size:13px;color:#555;padding:8px 10px;border-bottom:1px solid #d5d5d5}
+  .b-field{background:#fff;border:1px solid #bbb;border-radius:4px;padding:6px 8px;font-size:12px}
+  .b-btn{font-size:12px;padding:5px 12px;border:1px solid #b0b0b0;border-radius:5px;background:#f6f6f6}
+  .b-btn.prim{background:#3478f6;color:#fff;border-color:#2a63cf}
+  .b-badge{font-size:11px;padding:2px 7px;border-radius:4px;background:#e3e3e3;color:#444}
+
+  .note{margin-top:14px;font-size:11.5px;line-height:1.6;color:#e6ddd0;max-width:520px;
+    text-shadow:0 1px 2px rgba(0,0,0,.5)}
+  .note b{color:#f3ede4}
+  .tag{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+    background:rgba(93,138,80,.28);color:#bfe3b2;border:1px solid rgba(93,138,80,.5);
+    border-radius:5px;padding:2px 6px;margin:2px 4px 2px 0}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="kicker">AlembicRewrite / Design</div>
+  <h1>Liquid-Glass Redesign - Before / After</h1>
+  <p>The three most-changed screens rendered with the ratified Alembic liquid-glass recipe: warm smoke-card glass, asymmetric specular rims, two-green accent discipline, Source Serif display over DM Sans body, and the two-layer focus ring. Backgrounds show the warm-dark wallpaper the glass is designed to float over.</p>
+</div>
+
+<!-- ================= PALETTE ================= -->
+<section class="screen">
+  <h2>1. Command Palette</h2>
+  <div class="sub">Global Cmd+Shift+E. Type-to-filter list of rewrite styles.</div>
+  <div class="ba">
+
+    <!-- BEFORE -->
+    <div>
+      <div class="col-label">Before</div>
+      <div class="before-frame" style="width:360px;max-width:100%">
+        <div class="b-head">🔍  AlembicRewriter</div>
+        <div style="padding:6px">
+          <div class="b-row sel">Ⓐ Concise &nbsp;<span style="opacity:.7;font-size:11px">claude-sonnet</span><span style="margin-left:auto;font-size:11px;opacity:.8">⌘⇧R</span></div>
+          <div class="b-row">Ⓐ Formalise <span style="margin-left:auto;font-size:11px;color:#888">⌘⇧F</span></div>
+          <div class="b-row">Ⓞ Plain English <span style="margin-left:auto;font-size:11px;color:#888">?</span></div>
+          <div class="b-row">Ⓐ Warm tone</div>
+        </div>
+      </div>
+      <div class="note">
+        Flat popover material, cool blue selection, no caret in the filter, hover fights the arrow keys, and an arrow-bound hotkey renders as <b>?</b>.
+      </div>
+    </div>
+
+    <!-- AFTER -->
+    <div>
+      <div class="col-label after">After</div>
+      <div class="glass" style="width:360px;max-width:100%;padding:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:9px;padding:12px 14px 10px">
+          <span style="color:var(--accent-vibrant);font-size:15px;text-shadow:0 0 8px rgba(255,255,255,.6)">🔍</span>
+          <span class="wtitle" style="flex:1">Concise<span style="border-left:1.5px solid var(--accent);margin-left:1px;animation:none">&#8203;</span></span>
+          <span class="microlabel">4 of 6</span>
+        </div>
+        <div style="height:1px;background:rgba(0,0,0,.08);margin:0 12px"></div>
+        <div style="padding:8px">
+          <div class="prow sel"><span class="g">A</span><span class="nm">Concise</span><span class="md" style="margin-right:8px">claude-sonnet</span><span class="hk">⌘⇧R</span></div>
+          <div class="prow"><span class="g">A</span><span class="nm">Formalise</span><span class="md" style="margin-right:8px">claude-sonnet</span><span class="hk">⌘⇧F</span></div>
+          <div class="prow"><span class="g">O</span><span class="nm">Plain English</span><span class="md" style="margin-right:8px">gpt-4o</span><span class="hk">↑</span></div>
+          <div class="prow"><span class="g">A</span><span class="nm">Warm tone</span><span class="md" style="margin-right:8px">claude-sonnet</span><span class="hk"></span></div>
+        </div>
+      </div>
+      <div class="note">
+        <span class="tag">B2 fixed</span><span class="tag">B3 fixed</span><span class="tag">B11 fixed</span>
+        Warm smoke glass with the top-plus-left specular rim, serif query with a live caret, a result count, green selection fill, and one shared hotkey formatter so <b>↑</b> renders everywhere. Highlight snaps to the top match on every keystroke; hover only selects when the mouse actually moves.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REVIEW PANEL ================= -->
+<section class="screen">
+  <h2>2. Review Panel</h2>
+  <div class="sub">Streaming rewrite with original, result, iterate field, and accept.</div>
+  <div class="ba">
+
+    <!-- BEFORE -->
+    <div>
+      <div class="col-label">Before</div>
+      <div class="before-frame dark" style="width:100%;max-width:520px">
+        <div style="padding:14px 16px;color:#e8e8e8">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+            <span>✨ Concise</span>
+            <span class="b-badge" style="background:#444;color:#ddd">Streaming…</span>
+            <span style="margin-left:auto">✕</span>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;color:#999;margin-bottom:4px">ORIGINAL</div>
+          <div style="font-size:12px;color:#bbb;background:#333;border-radius:4px;padding:8px;margin-bottom:12px">Please find attached the document which I have prepared for your kind review at your earliest convenience.</div>
+          <div style="font-size:12px;color:#eee;background:#333;border-radius:4px;padding:8px;min-height:56px">Attached is the document for your review.</div>
+          <div style="margin-top:10px;background:#3a3a3a;border-radius:5px;padding:6px 8px;font-size:12px;color:#888">🔁 Iterate…</div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button class="b-btn" style="background:#444;color:#ddd;border-color:#555">Cancel</button>
+            <span style="flex:1"></span>
+            <button class="b-btn" style="background:#444;color:#ddd;border-color:#555">Retry</button>
+            <button class="b-btn prim" style="background:#c9a94a;color:#2a2208;border:none">Accept</button>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        HUD-window material, Accept enabled mid-stream (pastes partial text, logs 0 tokens), iterate field live during streaming, panel never dismisses on click-away.
+      </div>
+    </div>
+
+    <!-- AFTER -->
+    <div>
+      <div class="col-label after">After</div>
+      <div class="glass" style="width:100%;max-width:520px;padding:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:10px;padding:14px 16px 12px">
+          <span style="color:var(--accent-vibrant);text-shadow:0 0 8px rgba(255,255,255,.6)">✨</span>
+          <span class="wtitle" style="flex:1">Concise</span>
+          <span class="badge stream"><span style="width:7px;height:7px;border-radius:50%;background:var(--warning);display:inline-block"></span>Streaming</span>
+          <span style="color:var(--muted)">✕</span>
+        </div>
+        <div style="height:1px;background:rgba(0,0,0,.08);margin:0 16px"></div>
+        <div style="padding:14px 16px">
+          <div class="microlabel" style="margin-bottom:5px">Original</div>
+          <div style="font-size:12px;color:#4a453f;background:var(--surface-3);border:1px solid var(--border);border-radius:var(--radius-2);padding:9px 11px;margin-bottom:14px;line-height:1.5">Please find attached the document which I have prepared for your kind review at your earliest convenience.</div>
+          <div class="microlabel" style="margin-bottom:5px">Rewrite</div>
+          <div style="font-size:13px;color:var(--ink-base);background:#fff;border:1px solid var(--border);border-radius:var(--radius-2);padding:9px 11px;min-height:60px;line-height:1.5">Attached is the document for your review.</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:12px;background:color-mix(in srgb,var(--accent-soft) 55%,transparent);border-radius:var(--radius-2);padding:7px 10px">
+            <span style="color:var(--accent-text)">🔁</span>
+            <span style="flex:1;font-size:12px;color:var(--muted)">Iterate (available when ready)</span>
+          </div>
+        </div>
+        <div style="height:1px;background:rgba(0,0,0,.08);margin:0 16px"></div>
+        <div style="display:flex;gap:9px;padding:12px 16px;align-items:center">
+          <button class="btn btn-smoke">Cancel</button>
+          <span style="flex:1"></span>
+          <button class="btn btn-smoke">Retry</button>
+          <button class="btn btn-gold" style="opacity:.45">Accept</button>
+        </div>
+      </div>
+      <div class="note">
+        <span class="tag">B5 fixed</span><span class="tag">B6 fixed</span><span class="tag">B1 fixed</span>
+        Solid opaque reading panes on warm glass chrome. Accept and iterate are disabled until the stream completes (gold Accept dimmed to 0.45 here). Panel dismisses on click-away via a resignKey observer. Reading surfaces stay pinned-ink opaque, never glass.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SETTINGS ================= -->
+<section class="screen">
+  <h2>3. Settings - Styles Tab</h2>
+  <div class="sub">Master/detail styles CRUD with the style editor and hotkey recorder.</div>
+  <div class="ba">
+
+    <!-- BEFORE -->
+    <div>
+      <div class="col-label">Before</div>
+      <div class="before-frame" style="width:100%;max-width:520px">
+        <div style="display:flex;font-size:12px;border-bottom:1px solid #d5d5d5">
+          <div style="padding:7px 12px;color:#666">General</div>
+          <div style="padding:7px 12px;color:#666">API Keys</div>
+          <div style="padding:7px 12px;background:#fff;color:#111;border-bottom:2px solid #3478f6">Styles</div>
+        </div>
+        <div style="display:flex">
+          <div style="width:150px;border-right:1px solid #d5d5d5;padding:6px">
+            <div class="b-row sel" style="font-size:12px">Concise</div>
+            <div class="b-row" style="font-size:12px">Formalise</div>
+            <div class="b-row" style="font-size:12px">Warm tone</div>
+          </div>
+          <div style="flex:1;padding:12px;font-size:12px;color:#333">
+            <div style="color:#666;margin-bottom:3px">Name</div>
+            <div class="b-field" style="margin-bottom:10px">Concise</div>
+            <div style="color:#666;margin-bottom:3px">Prompt</div>
+            <div class="b-field" style="min-height:48px;margin-bottom:10px;font-family:monospace">Rewrite {{selection}} to be concise.</div>
+            <div style="color:#666;margin-bottom:3px">Hotkey</div>
+            <div class="b-field" style="margin-bottom:12px">⌘⇧R</div>
+            <button class="b-btn prim">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        System TabView. Edits live only in memory; closing Settings drops an unsaved style or a just-recorded hotkey. No duplicate-hotkey warning, no per-provider key status.
+      </div>
+    </div>
+
+    <!-- AFTER -->
+    <div>
+      <div class="col-label after">After</div>
+      <div class="glass" style="width:100%;max-width:520px;padding:0;overflow:hidden">
+        <div style="display:flex;gap:2px;padding:10px 14px 0">
+          <div style="font-size:13px;font-weight:600;padding:6px 12px;color:var(--muted)">General</div>
+          <div style="font-size:13px;font-weight:600;padding:6px 12px;color:var(--muted)">API Keys</div>
+          <div style="font-size:13px;font-weight:600;padding:6px 12px;color:var(--accent-text);border-bottom:2px solid var(--accent-vibrant)">Styles</div>
+        </div>
+        <div style="height:1px;background:rgba(0,0,0,.08);margin:0 14px"></div>
+        <div style="display:flex">
+          <div class="clear-glass" style="width:158px;margin:12px 0 12px 12px;padding:6px;border-radius:var(--radius-2)">
+            <div class="prow sel" style="font-size:12.5px"><span class="nm">Concise</span></div>
+            <div class="prow" style="font-size:12.5px"><span class="nm">Formalise</span></div>
+            <div class="prow" style="font-size:12.5px"><span class="nm">Warm tone</span></div>
+          </div>
+          <div style="flex:1;padding:14px 16px">
+            <div class="microlabel" style="margin-bottom:5px">Name</div>
+            <div class="field" style="margin-bottom:12px">Concise</div>
+            <div class="microlabel" style="margin-bottom:5px">Prompt</div>
+            <div class="field" style="min-height:50px;margin-bottom:12px;font-family:'IBM Plex Mono',monospace;font-size:11.5px">Rewrite {{selection}} to be concise.</div>
+            <div class="microlabel" style="margin-bottom:5px">Hotkey</div>
+            <div class="field btn-focus" style="margin-bottom:5px;font-family:'IBM Plex Mono',monospace;display:inline-block">⌘⇧R</div>
+            <div style="font-size:10px;color:var(--warning-text);margin-bottom:12px">⚠ shared with Formalise</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn btn-primary">Save</button>
+              <span style="font-size:11px;color:var(--accent-text);font-weight:700">● Anthropic key set</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <span class="tag">B4 fixed</span><span class="tag">B7 fixed</span><span class="tag">F1 fixed</span><span class="tag">F10 fixed</span>
+        Glass chrome with an inner clear-glass list (nested glass one step whiter). Solid pinned-ink fields. Autosave on field change, a duplicate-hotkey amber warning, the two-layer focus ring on the armed recorder, and inline provider-key status. Gold reserved strictly for the warning semantic.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="page-head" style="margin-top:10px">
+  <div class="note" style="max-width:1160px">
+    <b>System rules shown:</b> glass on chrome and solid on reading; warm tints not cool; asymmetric specular rim (top full, left half); nested glass goes one step whiter; two greens (#4a6741 fills, #5d8a50 glows on glass with a white underglow); gold is warning-only; two-layer focus ring; tiny heavy wide-tracked uppercase labels against a quiet Source Serif display.
+  </div>
+</div>
+
+</body>
+</html>
