@@ -57,10 +57,10 @@ struct GeneralTab: View {
 
             Section("Global hotkey") {
                 LabeledContent("Open style palette") {
-                    Text("⌘⇧R")
+                    Text("⌘⇧E")
                         .font(.system(.body, design: .monospaced))
                 }
-                Text("The global hotkey opens the style palette over your current selection. Recording a custom hotkey is not yet wired up in v1; the default is Command-Shift-R.")
+                Text("The global hotkey opens the style palette over your current selection. The default is Command-Shift-E. The AlembicRewriter style has its own direct hotkey, Command-Shift-R, which skips the palette.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -338,76 +338,90 @@ struct StyleEditor: View {
 
 // MARK: - Hotkey field
 
-/// A minimal per-style hotkey editor for v1: modifier toggles plus a single
-/// key character. Converts to/from the Carbon-flavoured `Hotkey` value. A full
-/// key-capture recorder is deferred.
+/// A key-capture recorder for a per-style direct hotkey. Shows the current combo
+/// (e.g. "⌘⇧R") or "Click to record". Clicking arms a local NSEvent monitor that
+/// captures the next modifier+key combination; Esc cancels; the ✕ clears it.
 struct HotkeyField: View {
     @Binding var hotkey: Hotkey?
 
-    @State private var enabled = false
-    @State private var useCommand = true
-    @State private var useShift = true
-    @State private var useOption = false
-    @State private var useControl = false
-    @State private var keyCharacter = ""
+    @State private var recording = false
+    @State private var monitor: Any?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Toggle("Assign a direct hotkey", isOn: $enabled)
-                .onChange(of: enabled) { _, on in if !on { hotkey = nil } else { rebuild() } }
+        HStack(spacing: 8) {
+            Button(action: toggleRecording) {
+                Text(fieldLabel)
+                    .font(.system(.body, design: .monospaced))
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 10)
+                    .background(
+                        RoundedRectangle(cornerRadius: AlembicMetrics.radiusInner, style: .continuous)
+                            .fill(recording ? Alembic.accentSoft.opacity(0.5) : Color.clear)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: AlembicMetrics.radiusInner, style: .continuous)
+                            .strokeBorder(
+                                recording ? Alembic.accent : Alembic.border,
+                                lineWidth: recording ? 2 : AlembicMetrics.hairline
+                            )
+                    )
+                    .foregroundStyle(recording ? Alembic.accent : Alembic.ink)
+            }
+            .buttonStyle(.plain)
+            .frame(maxWidth: 260)
 
-            if enabled {
-                HStack(spacing: 12) {
-                    Toggle("⌘", isOn: $useCommand).onChange(of: useCommand) { _, _ in rebuild() }
-                    Toggle("⇧", isOn: $useShift).onChange(of: useShift) { _, _ in rebuild() }
-                    Toggle("⌥", isOn: $useOption).onChange(of: useOption) { _, _ in rebuild() }
-                    Toggle("⌃", isOn: $useControl).onChange(of: useControl) { _, _ in rebuild() }
+            if hotkey != nil && !recording {
+                Button {
+                    hotkey = nil
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
                 }
-                .toggleStyle(.button)
-
-                TextField("Key (single letter or digit)", text: $keyCharacter)
-                    .frame(width: 220)
-                    .onChange(of: keyCharacter) { _, new in
-                        if new.count > 1 { keyCharacter = String(new.suffix(1)) }
-                        rebuild()
-                    }
-
-                Text(hotkey == nil
-                     ? "Enter one letter or digit to set the shortcut."
-                     : "Shortcut set.")
-                    .font(.footnote)
-                    .foregroundStyle(hotkey == nil ? .orange : .secondary)
+                .buttonStyle(.plain)
+                .help("Clear hotkey")
             }
         }
-        .onAppear(perform: loadFromBinding)
+        .onDisappear(perform: stopRecording)
     }
 
-    private func loadFromBinding() {
-        guard let hk = hotkey else {
-            enabled = false
-            return
-        }
-        enabled = true
-        useCommand = hk.modifiers & HotkeyCarbon.command != 0
-        useShift = hk.modifiers & HotkeyCarbon.shift != 0
-        useOption = hk.modifiers & HotkeyCarbon.option != 0
-        useControl = hk.modifiers & HotkeyCarbon.control != 0
-        keyCharacter = HotkeyCarbon.character(forKeyCode: hk.keyCode) ?? ""
+    private var fieldLabel: String {
+        if recording { return "Press keys…  (Esc to cancel)" }
+        if let hk = hotkey { return HotkeyCarbon.displayString(for: hk) }
+        return "Click to record"
     }
 
-    private func rebuild() {
-        guard enabled,
-              let char = keyCharacter.lowercased().first,
-              let code = HotkeyCarbon.keyCode(for: char) else {
-            hotkey = nil
-            return
+    private func toggleRecording() {
+        if recording { stopRecording() } else { startRecording() }
+    }
+
+    private func startRecording() {
+        recording = true
+        monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { event in
+            // Escape cancels without changing the current hotkey.
+            if event.keyCode == 53 {
+                self.stopRecording()
+                return nil // consume: do not trigger anything else
+            }
+            let carbonMods = HotkeyCarbon.carbonModifiers(from: event.modifierFlags)
+            // Require at least one modifier and a mappable key so the shortcut is
+            // registrable and displayable.
+            if carbonMods != 0, HotkeyCarbon.displayName(forKeyCode: UInt32(event.keyCode)) != nil {
+                self.hotkey = Hotkey(keyCode: UInt32(event.keyCode), modifiers: carbonMods)
+                self.stopRecording()
+            }
+            // Consume every key event while recording so the combo never leaks
+            // to a field, a menu, or a hotkey handler.
+            return nil
         }
-        var mods: UInt32 = 0
-        if useCommand { mods |= HotkeyCarbon.command }
-        if useShift { mods |= HotkeyCarbon.shift }
-        if useOption { mods |= HotkeyCarbon.option }
-        if useControl { mods |= HotkeyCarbon.control }
-        hotkey = Hotkey(keyCode: code, modifiers: mods)
+    }
+
+    private func stopRecording() {
+        recording = false
+        if let monitor {
+            NSEvent.removeMonitor(monitor)
+            self.monitor = nil
+        }
     }
 }
 
@@ -432,12 +446,51 @@ enum HotkeyCarbon {
         "k": 0x28, "n": 0x2D, "m": 0x2E
     ]
 
+    // A few non-alphanumeric keys worth allowing in a recorded shortcut.
+    private static let specialNames: [UInt32: String] = [
+        0x24: "↩",   // return
+        0x30: "⇥",   // tab
+        0x31: "Space",
+        0x33: "⌫",   // delete
+        0x35: "⎋",   // escape
+        0x7B: "←", 0x7C: "→", 0x7D: "↓", 0x7E: "↑"
+    ]
+
     static func keyCode(for character: Character) -> UInt32? {
         map[character]
     }
 
     static func character(forKeyCode code: UInt32) -> String? {
         map.first { $0.value == code }.map { String($0.key) }
+    }
+
+    /// Human-readable name for a virtual key code (letters/digits uppercased,
+    /// plus a handful of special keys). `nil` for unmappable codes.
+    static func displayName(forKeyCode code: UInt32) -> String? {
+        if let ch = character(forKeyCode: code) { return ch.uppercased() }
+        return specialNames[code]
+    }
+
+    /// Convert AppKit modifier flags into the Carbon modifier mask used by
+    /// `Hotkey`.
+    static func carbonModifiers(from flags: NSEvent.ModifierFlags) -> UInt32 {
+        var mods: UInt32 = 0
+        if flags.contains(.command) { mods |= command }
+        if flags.contains(.shift) { mods |= shift }
+        if flags.contains(.option) { mods |= option }
+        if flags.contains(.control) { mods |= control }
+        return mods
+    }
+
+    /// Render a `Hotkey` as a symbol string, e.g. "⌘⇧R" (modifier order ⌃⌥⇧⌘).
+    static func displayString(for hotkey: Hotkey) -> String {
+        var s = ""
+        if hotkey.modifiers & control != 0 { s += "⌃" }
+        if hotkey.modifiers & option != 0 { s += "⌥" }
+        if hotkey.modifiers & shift != 0 { s += "⇧" }
+        if hotkey.modifiers & command != 0 { s += "⌘" }
+        s += displayName(forKeyCode: hotkey.keyCode) ?? "?"
+        return s
     }
 }
 

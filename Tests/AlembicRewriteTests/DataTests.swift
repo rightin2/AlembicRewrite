@@ -96,11 +96,55 @@ final class DataTests: XCTestCase {
         let store = StyleStore(directory: tmpDir)
         try store.seedDefaultsIfEmpty()
         let all = try store.all()
-        XCTAssertEqual(all.count, 3)
-        XCTAssertEqual(all.first?.name, "Effective prompt rewrite")
+        XCTAssertEqual(all.count, 4)
+        XCTAssertEqual(all.first?.name, "AlembicRewriter")
         XCTAssertEqual(all.first?.sortOrder, 0)
         // Every default carries the substitution placeholder.
         XCTAssertTrue(all.allSatisfy { $0.promptTemplate.contains("{{selection}}") })
+    }
+
+    func testSeedDefaultsAlembicRewriterConfig() throws {
+        let store = StyleStore(directory: tmpDir)
+        try store.seedDefaultsIfEmpty()
+        let first = try XCTUnwrap(try store.all().first)
+        XCTAssertEqual(first.name, "AlembicRewriter")
+        XCTAssertEqual(first.provider, .anthropic)
+        XCTAssertEqual(first.model, "claude-haiku-4-5")
+        XCTAssertEqual(first.temperature, 0.3, accuracy: 1e-9)
+        // Direct hotkey Cmd+Shift+R (kVK_ANSI_R == 0x0F).
+        let hk = try XCTUnwrap(first.hotkey)
+        XCTAssertEqual(hk.keyCode, 0x0F)
+        XCTAssertEqual(hk.modifiers, HotkeyCarbon.command | HotkeyCarbon.shift)
+        // Directional Prompting content is embedded verbatim.
+        XCTAssertTrue(first.promptTemplate.contains("Directional Prompting method"))
+    }
+
+    func testMigrationInsertsAlembicRewriterWhenMissing() throws {
+        // Simulate an existing install seeded before AlembicRewriter existed:
+        // three styles at sortOrder 0, 1, 2, none named AlembicRewriter.
+        let store = StyleStore(directory: tmpDir)
+        try store.save(Style(name: "Effective prompt rewrite", promptTemplate: "{{selection}}", provider: .anthropic, model: "claude-sonnet-4-6", temperature: 0.3, sortOrder: 0))
+        try store.save(Style(name: "Make concise", promptTemplate: "{{selection}}", provider: .anthropic, model: "claude-haiku-4-5", temperature: 0.3, sortOrder: 1))
+        try store.save(Style(name: "Professional tone", promptTemplate: "{{selection}}", provider: .openai, model: "gpt-4o-mini", temperature: 0.4, sortOrder: 2))
+
+        try store.migrateAlembicRewriterIfMissing()
+
+        let all = try store.all()
+        XCTAssertEqual(all.count, 4)
+        XCTAssertEqual(all.first?.name, "AlembicRewriter")
+        XCTAssertEqual(all.first?.sortOrder, 0)
+        // Existing styles preserved and pushed back one slot.
+        XCTAssertEqual(all.map(\.name), ["AlembicRewriter", "Effective prompt rewrite", "Make concise", "Professional tone"])
+        XCTAssertEqual(all.map(\.sortOrder), [0, 1, 2, 3])
+    }
+
+    func testMigrationIsNoOpWhenAlembicRewriterPresent() throws {
+        let store = StyleStore(directory: tmpDir)
+        try store.seedDefaultsIfEmpty() // already contains AlembicRewriter
+        try store.migrateAlembicRewriterIfMissing()
+        let names = try store.all().map(\.name)
+        XCTAssertEqual(names.filter { $0 == "AlembicRewriter" }.count, 1)
+        XCTAssertEqual(try store.all().count, 4)
     }
 
     func testSeedDefaultsIsNoOpWhenPopulated() throws {
@@ -115,7 +159,7 @@ final class DataTests: XCTestCase {
         let s1 = StyleStore(directory: tmpDir)
         try s1.seedDefaultsIfEmpty()
         let s2 = StyleStore(directory: tmpDir)
-        XCTAssertEqual(try s2.all().count, 3)
+        XCTAssertEqual(try s2.all().count, 4)
     }
 
     // MARK: - Template substitution

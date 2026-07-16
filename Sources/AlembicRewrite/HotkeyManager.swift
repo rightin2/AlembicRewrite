@@ -9,7 +9,8 @@
 //  presses back to the stored Swift closure. The global hotkey opens the style
 //  palette; per-style hotkeys skip the palette and fire straight at a style.
 //
-//  Default global hotkey: Cmd+Shift+R.
+//  Default global hotkey: Cmd+Shift+E (Cmd+Shift+R is the AlembicRewriter
+//  style's direct hotkey).
 //
 
 import Foundation
@@ -17,9 +18,10 @@ import Carbon.HIToolbox
 
 public final class HotkeyManager: HotkeyManaging {
 
-    /// The app default global shortcut: Cmd+Shift+R.
+    /// The app default global shortcut: Cmd+Shift+E. (Cmd+Shift+R is reserved
+    /// for the AlembicRewriter style's direct hotkey.)
     public static let defaultGlobalHotkey = Hotkey(
-        keyCode: UInt32(kVK_ANSI_R),
+        keyCode: UInt32(kVK_ANSI_E),
         modifiers: UInt32(cmdKey | shiftKey)
     )
 

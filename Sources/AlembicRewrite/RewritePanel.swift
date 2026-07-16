@@ -233,7 +233,32 @@ public struct RewritePanelView: View {
             RoundedRectangle(cornerRadius: AlembicMetrics.radius, style: .continuous)
                 .strokeBorder(Alembic.border.opacity(0.6), lineWidth: AlembicMetrics.hairline)
         )
+        .overlay(alignment: .topTrailing) {
+            closeButton
+                .padding(10)
+        }
         .tint(Alembic.accent)
+    }
+
+    /// Small circular ✕ that cancels any in-flight stream and closes the panel,
+    /// mirroring Cancel / Esc.
+    private var closeButton: some View {
+        Button {
+            model.cancel()
+        } label: {
+            Image(systemName: "xmark")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(Alembic.inkMuted)
+                .frame(width: 22, height: 22)
+                .background(
+                    Circle().fill(Alembic.accentSoft.opacity(0.5))
+                )
+                .overlay(
+                    Circle().strokeBorder(Alembic.border.opacity(0.6), lineWidth: AlembicMetrics.hairline)
+                )
+        }
+        .buttonStyle(.plain)
+        .help("Close (Esc)")
     }
 
     private var header: some View {

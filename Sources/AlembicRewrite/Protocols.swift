@@ -190,9 +190,13 @@ public protocol StyleStoring: AnyObject {
     func delete(id: UUID) throws
     /// Persist a full reordering (updates each style's `sortOrder`).
     func reorder(_ styles: [Style]) throws
-    /// Populate the store with the three built-in defaults if it is empty
-    /// (including "Effective prompt rewrite"). No-op if styles already exist.
+    /// Populate the store with the built-in defaults if it is empty (including
+    /// "AlembicRewriter" and "Effective prompt rewrite"). No-op if styles exist.
     func seedDefaultsIfEmpty() throws
+    /// One-time migration for installs that seeded before "AlembicRewriter"
+    /// existed: insert it at the front if no style with that name is present.
+    /// No-op once present. Runs on every launch.
+    func migrateAlembicRewriterIfMissing() throws
 }
 
 /// Append-only rewrite log, capped at the most recent 200 entries.

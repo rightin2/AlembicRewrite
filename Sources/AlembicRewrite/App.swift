@@ -186,8 +186,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.applicationIconImage = icon
         }
 
-        // Seed the three built-in styles on a fresh install.
+        // Seed the built-in styles on a fresh install, then run the one-time
+        // migration that adds "AlembicRewriter" to installs seeded before it
+        // existed (no-op once present).
         try? env.styleStore.seedDefaultsIfEmpty()
+        try? env.styleStore.migrateAlembicRewriterIfMissing()
 
         // First-launch bootstrap key import (advises rotation via a banner).
         if BootstrapKeyImporter.importIfNeeded(into: env.keychain) {
