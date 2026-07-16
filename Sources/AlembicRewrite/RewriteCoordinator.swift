@@ -67,6 +67,13 @@ final class RewriteCoordinator {
     private var lastInputTokens = 0
     private var lastOutputTokens = 0
 
+    /// The app-preferences store the ten settings enforce through (section 3).
+    private let settings = AppSettings.shared
+
+    /// The pre-rewrite original text stashed for the undo window (setting 3.7),
+    /// with the instant it expires. Set after every paste when undo is on.
+    private var undoStash: (original: String, expiry: Date)?
+
     init(env: AppEnvironment, windows: WindowManager) {
         self.env = env
         self.windows = windows
@@ -81,8 +88,12 @@ final class RewriteCoordinator {
     // MARK: - Hotkey registration
 
     /// Register the global palette hotkey and every per-style direct hotkey.
+    /// INTEGRATION(global-hotkey): the global trigger is the user-editable
+    /// `AppSettings.shared.prefs.globalHotkey` (setting 3.1), not the hardcoded
+    /// default. `syncStyleHotkeys` re-reads it, so rebinding then closing Settings
+    /// (which fires `onSettingsClosed -> syncStyleHotkeys`) re-registers it live.
     func registerHotkeys() {
-        try? env.hotkeys.registerGlobalHotkey(HotkeyManager.defaultGlobalHotkey) { [weak self] in
+        try? env.hotkeys.registerGlobalHotkey(settings.prefs.globalHotkey) { [weak self] in
             self?.handleGlobalHotkey()
         }
         syncStyleHotkeys()
@@ -97,7 +108,7 @@ final class RewriteCoordinator {
         // then re-adding each. unregisterAll would also drop the global, so we
         // rebuild both to stay in sync.
         env.hotkeys.unregisterAll()
-        try? env.hotkeys.registerGlobalHotkey(HotkeyManager.defaultGlobalHotkey) { [weak self] in
+        try? env.hotkeys.registerGlobalHotkey(settings.prefs.globalHotkey) { [weak self] in
             self?.handleGlobalHotkey()
         }
         for style in styles where style.hotkey != nil {
@@ -142,7 +153,10 @@ final class RewriteCoordinator {
 
     // MARK: - Rewrite pipeline
 
-    private func beginRewrite(style: Style) {
+    /// - Parameter preCaptured: when non-nil, the selection was already captured
+    ///   upstream (the large-selection guard handing a silent rewrite over to the
+    ///   review panel) so we skip a second Cmd+C. When nil, capture here.
+    private func beginRewrite(style: Style, preCaptured: String? = nil) {
         // Tear down anything already on screen so we never orphan a panel.
         activeTask?.cancel()
         removeEmptyKeyMonitor()
@@ -151,20 +165,36 @@ final class RewriteCoordinator {
 
         let model = RewritePanelViewModel(styleName: style.name, phase: .streaming)
         wireCallbacks(model: model, style: style)
-        panelController.show(model: model)
+
+        // INTEGRATION(spend-cap): refuse a new rewrite once the month is over the
+        // cap (setting 3.3), surfacing the reason in the panel error state.
+        if let blocked = self.spendCapBlockMessage() {
+            model.original = preCaptured ?? ""
+            model.fail(blocked)
+            self.panelController.show(model: model)
+            return
+        }
 
         activeTask = Task { [weak self] in
             guard let self else { return }
 
-            // 1. Capture the selection. SelectionService restores the clipboard
-            //    in a defer, so a throw here never loses the user's clipboard.
+            // 1. Capture the selection BEFORE the panel appears, so we never
+            //    flash a streaming spinner over an empty or failed selection
+            //    (B13). SelectionService restores the clipboard in a defer, so a
+            //    throw here never loses the user's clipboard.
             let selection: String
-            do {
-                selection = try await self.env.selection.captureSelection()
-            } catch {
-                model.original = ""
-                model.fail("Could not read the selection. \(Self.describe(error))")
-                return
+            if let preCaptured {
+                selection = preCaptured
+            } else {
+                do {
+                    selection = try await self.env.selection.captureSelection()
+                } catch {
+                    if Task.isCancelled { return }
+                    model.original = ""
+                    model.fail("Could not read the selection. \(Self.describe(error))")
+                    self.panelController.show(model: model)
+                    return
+                }
             }
 
             if Task.isCancelled { return }
@@ -173,14 +203,16 @@ final class RewriteCoordinator {
             guard !selection.isEmpty else {
                 model.original = ""
                 model.phase = .emptySelection
+                self.panelController.show(model: model)
                 self.installEmptyKeyMonitor()
                 return
             }
 
-            // 3. Build the first turn from the style template.
+            // 3. Non-empty: build the first turn (with the house-style rule when
+            //    enabled, setting 3.2), show the panel, then stream.
             model.original = selection
-            let prompt = Self.compose(template: style.promptTemplate, selection: selection)
-            self.messages = [ChatMessage(role: .user, content: prompt)]
+            self.messages = self.buildInitialMessages(style: style, selection: selection)
+            self.panelController.show(model: model)
 
             await self.runStream(style: style, model: model)
         }
@@ -203,6 +235,13 @@ final class RewriteCoordinator {
         hud.onDismiss = { [weak self] in self?.hudController.close() }
         hudController.show(model: hud)
 
+        // INTEGRATION(spend-cap): refuse the silent rewrite when over the monthly
+        // cap (setting 3.3), surfacing the reason as a sticky HUD error.
+        if let blocked = spendCapBlockMessage() {
+            hud.showError(blocked, sticky: true)
+            return
+        }
+
         activeTask = Task { [weak self] in
             guard let self else { return }
 
@@ -224,6 +263,16 @@ final class RewriteCoordinator {
                 return
             }
 
+            // 2b. INTEGRATION(large-selection-guard): a silent style fired on a
+            //     very large selection (setting 3.5) is forced into the review
+            //     panel so a stray Select-All cannot silently overwrite a whole
+            //     document. Hand the already-captured selection over unchanged.
+            if self.settings.exceedsLargeSelection(selection.count) {
+                self.hudController.close()
+                self.beginRewrite(style: style, preCaptured: selection)
+                return
+            }
+
             // 3. Read the BYOK key.
             let apiKey: String
             do {
@@ -238,8 +287,8 @@ final class RewriteCoordinator {
             }
 
             // 4. Stream the whole result (no panel, no incremental display).
-            let prompt = Self.compose(template: style.promptTemplate, selection: selection)
-            let msgs = [ChatMessage(role: .user, content: prompt)]
+            //    Messages carry the house-style rule when enabled (setting 3.2).
+            let msgs = self.buildInitialMessages(style: style, selection: selection)
             let client = LLMClientFactory.client(for: style.provider)
             let usage = UsageBox()
             var result = ""
@@ -248,6 +297,7 @@ final class RewriteCoordinator {
                     messages: msgs,
                     model: style.model,
                     temperature: style.temperature,
+                    maxTokens: style.maxTokens,
                     apiKey: apiKey,
                     onUsage: { input, output in usage.set(input: input, output: output) }
                 )
@@ -268,7 +318,13 @@ final class RewriteCoordinator {
                 return
             }
 
-            // 5. Hide the HUD, then paste over the selection.
+            // 4b. INTEGRATION(au-english): deterministically strip any em/en dash
+            //     the model still emitted before it hits the document (setting 3.2).
+            result = self.settings.applyDashStrip(result)
+
+            // 5. Hide the HUD, then paste over the selection. Stash the original
+            //    for the undo window (setting 3.7) BEFORE the paste.
+            self.stashForUndo(original: selection)
             self.hudController.close()
             do {
                 try await self.env.selection.replaceSelection(with: result)
@@ -276,7 +332,8 @@ final class RewriteCoordinator {
                 NSLog("AlembicRewrite: silent paste failed: \(error)")
             }
 
-            // 6. Log history + fold cost.
+            // 6. Log history (honouring the retention policy, setting 3.4) + fold
+            //    cost.
             let value = usage.value
             let entry = HistoryEntry(
                 original: selection,
@@ -287,7 +344,7 @@ final class RewriteCoordinator {
                 inputTokens: value?.input ?? 0,
                 outputTokens: value?.output ?? 0
             )
-            try? self.env.historyStore.add(entry)
+            self.logHistory(entry)
             if let value {
                 try? self.env.costMeter.record(UsageRecord(
                     provider: style.provider,
@@ -329,6 +386,7 @@ final class RewriteCoordinator {
             messages: messages,
             model: style.model,
             temperature: style.temperature,
+            maxTokens: style.maxTokens,
             apiKey: apiKey,
             onUsage: { input, output in usage.set(input: input, output: output) }
         )
@@ -338,6 +396,10 @@ final class RewriteCoordinator {
                 try Task.checkCancellation()
                 model.appendToken(delta)
             }
+            // INTEGRATION(au-english): strip disallowed dashes on completion so
+            // the preview matches exactly what Accept will paste (setting 3.2).
+            let stripped = settings.applyDashStrip(model.rewrite)
+            if stripped != model.rewrite { model.rewrite = stripped }
             model.finish()
             if let value = usage.value {
                 lastInputTokens = value.input
@@ -391,6 +453,8 @@ final class RewriteCoordinator {
 
         Task { [weak self] in
             guard let self else { return }
+            // Stash the original for the undo window (setting 3.7) before pasting.
+            self.stashForUndo(original: original)
             // Paste over the selection. Clipboard is restored in a defer inside
             // the service, so a paste failure still leaves the user's clipboard
             // intact.
@@ -408,8 +472,77 @@ final class RewriteCoordinator {
                 inputTokens: inputTokens,
                 outputTokens: outputTokens
             )
-            try? self.env.historyStore.add(entry)
+            self.logHistory(entry)
             self.env.bumpRefresh()
+        }
+    }
+
+    // MARK: - Prompt assembly, spend cap, history, undo (settings 3.2 - 3.7)
+
+    /// Build the first-turn message list, prepending the house-style rule as a
+    /// system turn when enforcement is on (setting 3.2).
+    private func buildInitialMessages(style: Style, selection: String) -> [ChatMessage] {
+        var msgs: [ChatMessage] = []
+        if let fragment = settings.houseStylePromptFragment() {
+            msgs.append(ChatMessage(role: .system, content: fragment))
+        }
+        let prompt = Self.compose(template: style.promptTemplate, selection: selection)
+        msgs.append(ChatMessage(role: .user, content: prompt))
+        return msgs
+    }
+
+    /// The message to show when the monthly spend cap blocks a rewrite (setting
+    /// 3.3), or `nil` to proceed. `.warn` proceeds silently for now.
+    private func spendCapBlockMessage() -> String? {
+        switch settings.evaluateSpendCap(monthToDateUSD: env.costMeter.monthToDateCostUSD()) {
+        case .ok, .warn:
+            return nil
+        case .blocked(let cap):
+            return String(
+                format: "Monthly spend cap of $%.2f reached. Raise the cap in Settings or wait for the new month.",
+                cap
+            )
+        }
+    }
+
+    /// Append to History honouring the retention policy (setting 3.4): skip when
+    /// logging is off, and run a date-based trim after each add.
+    private func logHistory(_ entry: HistoryEntry) {
+        guard settings.historyShouldLog() else { return }
+        try? env.historyStore.add(entry)
+        if let cutoff = settings.historyTrimCutoff() {
+            try? env.historyStore.prune(olderThan: cutoff)
+        }
+    }
+
+    /// Remember the pre-rewrite text for the undo window (setting 3.7). No-op when
+    /// undo is disabled.
+    private func stashForUndo(original: String) {
+        guard settings.prefs.undoEnabled else { undoStash = nil; return }
+        let window = TimeInterval(max(1, settings.prefs.undoWindowSeconds))
+        undoStash = (original: original, expiry: Date().addingTimeInterval(window))
+    }
+
+    /// Whether an unexpired undo original is available (drives the menu item's
+    /// enabled state, setting 3.7).
+    var canUndo: Bool {
+        guard settings.prefs.undoEnabled, let stash = undoStash else { return false }
+        return Date() < stash.expiry
+    }
+
+    /// Re-paste the stashed original over the current selection (setting 3.7).
+    /// Silently does nothing when the window has lapsed or undo is off.
+    func undoLastRewrite() {
+        guard settings.prefs.undoEnabled, let stash = undoStash, Date() < stash.expiry else { return }
+        undoStash = nil
+        let original = stash.original
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await self.env.selection.replaceSelection(with: original)
+            } catch {
+                NSLog("AlembicRewrite: undo paste failed: \(error)")
+            }
         }
     }
 
@@ -426,7 +559,7 @@ final class RewriteCoordinator {
     @discardableResult
     private func ensurePermission() -> Bool {
         if env.selection.hasAccessibilityPermission() { return true }
-        windows?.showOnboarding(env: env)
+        windows?.showOnboarding(env: env, startAt: .permission)
         return false
     }
 

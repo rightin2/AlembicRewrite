@@ -1,5 +1,7 @@
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/AnthropicClient.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/App.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/AppSettings.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/Components.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/CostMeter.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/DesignTokens.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/HistoryStore.swift.o
@@ -7,6 +9,7 @@
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/KeychainStore.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/LLMClient.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/Onboarding.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/OnboardingFlow.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/OpenAIClient.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/Palette.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/PriceTable.swift.o

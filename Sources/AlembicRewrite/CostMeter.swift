@@ -20,11 +20,47 @@ public final class CostMeter: CostMetering {
     }
 
     private struct State: Codable {
-        /// Keyed by model identifier string.
+        /// Lifetime-since-reset totals, keyed by model identifier string. Drives
+        /// the menu-bar spend display and is what `reset()` zeroes.
         var tallies: [String: ModelTally]
+        /// Per-calendar-month totals for the spend cap (setting 3.3), keyed by
+        /// month ("yyyy-MM") then model. Survives `reset()` so the cap keeps
+        /// tracking across a display reset.
+        var monthly: [String: [String: ModelTally]]
 
-        init(tallies: [String: ModelTally] = [:]) {
+        init(tallies: [String: ModelTally] = [:],
+             monthly: [String: [String: ModelTally]] = [:]) {
             self.tallies = tallies
+            self.monthly = monthly
+        }
+
+        private enum CodingKeys: String, CodingKey { case tallies, monthly }
+
+        /// Tolerant decoder: an older cost.json without `monthly` loads with an
+        /// empty month map rather than throwing (which would wipe the display).
+        init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            self.tallies = try c.decodeIfPresent([String: ModelTally].self, forKey: .tallies) ?? [:]
+            self.monthly = try c.decodeIfPresent([String: [String: ModelTally]].self, forKey: .monthly) ?? [:]
+        }
+    }
+
+    /// The "yyyy-MM" key for a given instant, in the user's calendar.
+    private static func monthKey(for date: Date = Date()) -> String {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.dateFormat = "yyyy-MM"
+        return f.string(from: date)
+    }
+
+    private static func cost(of tallies: [String: ModelTally]) -> Double {
+        tallies.reduce(0.0) { sum, entry in
+            let (model, tally) = entry
+            return sum + PriceTable.cost(
+                model: model,
+                inputTokens: tally.inputTokens,
+                outputTokens: tally.outputTokens
+            )
         }
     }
 
@@ -52,19 +88,28 @@ public final class CostMeter: CostMetering {
         tally.inputTokens += usage.inputTokens
         tally.outputTokens += usage.outputTokens
         state.tallies[usage.model] = tally
+
+        // Fold the same usage into the current month's bucket for the spend cap.
+        let key = Self.monthKey(for: usage.timestamp)
+        var month = state.monthly[key] ?? [:]
+        var monthTally = month[usage.model]
+            ?? ModelTally(provider: usage.provider, inputTokens: 0, outputTokens: 0)
+        monthTally.inputTokens += usage.inputTokens
+        monthTally.outputTokens += usage.outputTokens
+        month[usage.model] = monthTally
+        state.monthly[key] = month
+
         try JSONFile.write(state, to: fileURL())
+    }
+
+    public func monthToDateCostUSD() -> Double {
+        guard let state = try? load() else { return 0 }
+        return Self.cost(of: state.monthly[Self.monthKey()] ?? [:])
     }
 
     public func totalCostUSD() -> Double {
         guard let state = try? load() else { return 0 }
-        return state.tallies.reduce(0.0) { sum, entry in
-            let (model, tally) = entry
-            return sum + PriceTable.cost(
-                model: model,
-                inputTokens: tally.inputTokens,
-                outputTokens: tally.outputTokens
-            )
-        }
+        return Self.cost(of: state.tallies)
     }
 
     public func totalTokens() -> Int {
@@ -73,6 +118,10 @@ public final class CostMeter: CostMetering {
     }
 
     public func reset() throws {
-        try JSONFile.write(State(), to: fileURL())
+        // Zero the lifetime display totals only; keep the per-month buckets so
+        // the spend cap (setting 3.3) is not defeated by a display reset.
+        var state = (try? load()) ?? State()
+        state.tallies = [:]
+        try JSONFile.write(state, to: fileURL())
     }
 }

@@ -35,6 +35,13 @@ public final class NonActivatingPanel: NSPanel {
     /// leaves it `nil` and relies on SwiftUI keyboard shortcuts.
     public var keyDownHandler: ((NSEvent) -> Bool)?
 
+    /// Optional click-away hook. Fired when the panel resigns key status (the
+    /// user clicked into another app or window). The Palette and RewritePanel
+    /// controllers use it to cancel and tear the floating surface down instead
+    /// of leaving it stuck on screen (B1). Left `nil` by the HUD, which never
+    /// becomes key.
+    public var onResignKey: (() -> Void)?
+
     public init(contentRect: NSRect) {
         super.init(
             contentRect: contentRect,
@@ -63,6 +70,11 @@ public final class NonActivatingPanel: NSPanel {
     public override func keyDown(with event: NSEvent) {
         if keyDownHandler?(event) == true { return }
         super.keyDown(with: event)
+    }
+
+    public override func resignKey() {
+        super.resignKey()
+        onResignKey?()
     }
 }
 
@@ -176,7 +188,9 @@ public final class RewritePanelViewModel: ObservableObject {
     // Intent handlers the view calls.
 
     func accept() {
-        guard phase == .completed || phase == .streaming else { return }
+        // Only accept a finished stream. Accepting mid-stream would paste
+        // half-finished text and log zero tokens (B5).
+        guard phase == .completed else { return }
         onAccept?(rewrite)
     }
 
@@ -189,6 +203,9 @@ public final class RewritePanelViewModel: ObservableObject {
     }
 
     func submitIterate() {
+        // Only iterate on a finished stream, so a follow-up never captures
+        // partial assistant text as a completed turn (B6).
+        guard phase == .completed else { return }
         let instruction = iterateText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !instruction.isEmpty else { return }
         iterateText = ""
@@ -217,37 +234,39 @@ public struct RewritePanelView: View {
     }
 
     public var body: some View {
-        VStack(spacing: 0) {
-            header
-                .padding(.horizontal, 18)
-                .padding(.vertical, 14)
-            hairline
-            VStack(alignment: .leading, spacing: 16) {
-                originalPane
-                rewritePane
-                iterateField
+        GlassPanel(radius: AlembicMetrics.r3, material: .hudWindow) {
+            VStack(spacing: 0) {
+                header
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 14)
+                hairline
+                VStack(alignment: .leading, spacing: 16) {
+                    originalPane
+                    rewritePane
+                    // Iterate only makes sense once the stream has finished. Hiding
+                    // it otherwise keeps an "iterate" input from appearing under an
+                    // empty-selection or error layout (B14) and stops a mid-stream
+                    // follow-up by construction (B6).
+                    if model.phase == .completed {
+                        iterateField
+                    }
+                }
+                .padding(18)
+                hairline
+                actionRow
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 14)
             }
-            .padding(18)
-            hairline
-            actionRow
-                .padding(.horizontal, 18)
-                .padding(.vertical, 14)
         }
         .frame(width: 520)
         .frame(minHeight: 360)
-        .background(VisualEffectBackground())
-        .clipShape(RoundedRectangle(cornerRadius: AlembicMetrics.radius, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: AlembicMetrics.radius, style: .continuous)
-                .strokeBorder(Alembic.border.opacity(0.6), lineWidth: AlembicMetrics.hairline)
-        )
         .tint(Alembic.accent)
     }
 
     /// Full-width hairline divider between the header, body, and action row.
     private var hairline: some View {
         Rectangle()
-            .fill(Alembic.border.opacity(0.6))
+            .fill(Color.hairline)
             .frame(height: AlembicMetrics.hairline)
     }
 
@@ -259,13 +278,13 @@ public struct RewritePanelView: View {
         } label: {
             Image(systemName: "xmark")
                 .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(Alembic.inkMuted)
+                .foregroundStyle(Color.mutedBase)
                 .frame(width: 22, height: 22)
                 .background(
                     Circle().fill(Alembic.accentSoft.opacity(0.5))
                 )
                 .overlay(
-                    Circle().strokeBorder(Alembic.border.opacity(0.6), lineWidth: AlembicMetrics.hairline)
+                    Circle().strokeBorder(Color.hairline, lineWidth: AlembicMetrics.hairline)
                 )
         }
         .buttonStyle(.plain)
@@ -275,10 +294,11 @@ public struct RewritePanelView: View {
     private var header: some View {
         HStack(spacing: 8) {
             Image(systemName: "wand.and.stars")
-                .foregroundStyle(Alembic.accent)
+                .foregroundStyle(Alembic.accentVibrant)
+                .shadow(color: AlembicUnderglow.glowColor, radius: AlembicUnderglow.glowRadius)
             Text(model.styleName.isEmpty ? "Rewrite" : model.styleName)
-                .font(.alembicDisplay(17))
-                .foregroundStyle(Alembic.ink)
+                .font(.alTitleLg)
+                .foregroundStyle(Color.inkBase)
                 .lineLimit(1)
                 .truncationMode(.tail)
             Spacer(minLength: 12)
@@ -291,93 +311,89 @@ public struct RewritePanelView: View {
     private var statusBadge: some View {
         switch model.phase {
         case .streaming:
-            HStack(spacing: 6) {
-                ProgressView()
-                    .controlSize(.small)
-                Text("Streaming…")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            StatusBadge(.streaming)
         case .completed:
-            Label("Ready", systemImage: "checkmark.circle.fill")
-                .labelStyle(.titleAndIcon)
-                .font(.caption)
-                .foregroundStyle(Alembic.accent)
+            StatusBadge(.ready)
         case .emptySelection:
-            Label("No text selected", systemImage: "exclamationmark.circle")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            StatusBadge(.empty, text: "No text selected")
         case .error:
-            Label("Error", systemImage: "exclamationmark.triangle.fill")
-                .font(.caption)
-                .foregroundStyle(.orange)
+            StatusBadge(.error)
         }
     }
 
-    /// Section label with the standard 6pt gap above its content.
-    private func sectionLabel(_ text: String) -> some View {
-        Text(text)
-            .font(.caption2.weight(.semibold))
-            .tracking(0.6)
-            .foregroundStyle(.secondary)
+    /// A solid, opaque reading surface (rule L5: never a text pane on glass).
+    private func readingPane<C: View>(@ViewBuilder _ content: () -> C) -> some View {
+        content()
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: AlembicMetrics.r2, style: .continuous)
+                    .fill(Color.inputBg)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: AlembicMetrics.r2, style: .continuous)
+                    .strokeBorder(Color.inputBorder, lineWidth: 1)
+            )
     }
 
     private var originalPane: some View {
         VStack(alignment: .leading, spacing: 6) {
-            sectionLabel("ORIGINAL")
-            ScrollView {
-                Text(model.original.isEmpty ? "—" : model.original)
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                    .textSelection(.enabled)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 2)
-                    .padding(.vertical, 2)
+            SectionHeader("Original")
+            readingPane {
+                ScrollView {
+                    Text(model.original.isEmpty ? "—" : model.original)
+                        .font(.alBody)
+                        .foregroundStyle(Color.mutedBase)
+                        .textSelection(.enabled)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxHeight: 90)
             }
-            .frame(maxHeight: 90)
         }
     }
 
     @ViewBuilder
     private var rewritePane: some View {
         VStack(alignment: .leading, spacing: 6) {
-            sectionLabel("REWRITE")
-            ScrollViewReader { proxy in
-                ScrollView {
-                    // Top anchor so the view can pin to the start when a fresh
-                    // stream begins, before following the tail as tokens arrive.
-                    Color.clear.frame(height: 0).id("rewrite-top")
-                    Group {
-                        if case .error(let message) = model.phase {
-                            errorBody(message)
-                        } else if case .emptySelection = model.phase {
-                            Text("Nothing was selected. Press any key to dismiss.")
-                                .font(.callout)
-                                .foregroundStyle(.secondary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        } else {
-                            Text(model.rewrite.isEmpty && model.phase == .streaming
-                                 ? " " : model.rewrite)
-                                .font(.body)
-                                .textSelection(.enabled)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+            SectionHeader("Rewrite")
+            readingPane {
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        // Top anchor so the view can pin to the start when a fresh
+                        // stream begins, before following the tail as tokens arrive.
+                        Color.clear.frame(height: 0).id("rewrite-top")
+                        Group {
+                            if case .error(let message) = model.phase {
+                                errorBody(message)
+                            } else if case .emptySelection = model.phase {
+                                Text("Nothing was selected. Press any key to dismiss.")
+                                    .font(.alBody)
+                                    .foregroundStyle(Color.mutedBase)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            } else {
+                                Text(model.rewrite.isEmpty && model.phase == .streaming
+                                     ? " " : model.rewrite)
+                                    .font(.alBody)
+                                    .foregroundStyle(Color.inkBase)
+                                    .textSelection(.enabled)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                        }
+                        .id("rewrite-bottom")
+                    }
+                    .frame(minHeight: 120, maxHeight: 220)
+                    .onChange(of: model.phase) { newPhase in
+                        // Pin to the top the moment a new stream starts, so the
+                        // first tokens are never rendered mid-scroll.
+                        if newPhase == .streaming && model.rewrite.isEmpty {
+                            proxy.scrollTo("rewrite-top", anchor: .top)
                         }
                     }
-                    .padding(.horizontal, 2)
-                    .padding(.vertical, 2)
-                    .id("rewrite-bottom")
-                }
-                .frame(minHeight: 120, maxHeight: 220)
-                .onChange(of: model.phase) { newPhase in
-                    // Pin to the top the moment a new stream starts, so the
-                    // first tokens are never rendered mid-scroll.
-                    if newPhase == .streaming && model.rewrite.isEmpty {
-                        proxy.scrollTo("rewrite-top", anchor: .top)
-                    }
-                }
-                .onChange(of: model.rewrite) { _ in
-                    withAnimation(.linear(duration: 0.1)) {
-                        proxy.scrollTo("rewrite-bottom", anchor: .bottom)
+                    .onChange(of: model.rewrite) { _ in
+                        withAnimation(.linear(duration: 0.1)) {
+                            proxy.scrollTo("rewrite-bottom", anchor: .bottom)
+                        }
                     }
                 }
             }
@@ -387,13 +403,15 @@ public struct RewritePanelView: View {
     private func errorBody(_ message: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(message)
-                .font(.callout)
-                .foregroundStyle(.primary)
+                .font(.alBody)
+                .foregroundStyle(Color.danger)
             if !model.rewrite.isEmpty {
-                Divider()
+                Rectangle()
+                    .fill(Color.hairline)
+                    .frame(height: AlembicMetrics.hairline)
                 Text(model.rewrite)
-                    .font(.body)
-                    .foregroundStyle(.secondary)
+                    .font(.alBody)
+                    .foregroundStyle(Color.mutedBase)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -402,9 +420,11 @@ public struct RewritePanelView: View {
     private var iterateField: some View {
         HStack(spacing: 8) {
             Image(systemName: "arrow.triangle.2.circlepath")
-                .foregroundStyle(.secondary)
-            TextField("Iterate: shorter, more direct, friendlier…", text: $model.iterateText)
+                .foregroundStyle(Color.accentText)
+            TextField("Iterate: shorter, more direct, friendlier", text: $model.iterateText)
                 .textFieldStyle(.plain)
+                .font(.alInput)
+                .foregroundStyle(Color.inkBase)
                 .focused($iterateFocused)
                 .onSubmit { model.submitIterate() }
             if !model.iterateText.isEmpty {
@@ -412,7 +432,7 @@ public struct RewritePanelView: View {
                     model.submitIterate()
                 } label: {
                     Image(systemName: "arrow.up.circle.fill")
-                        .foregroundStyle(.tint)
+                        .foregroundStyle(Alembic.accent)
                 }
                 .buttonStyle(.plain)
             }
@@ -420,54 +440,44 @@ public struct RewritePanelView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .background(
-            RoundedRectangle(cornerRadius: AlembicMetrics.radiusInner, style: .continuous)
-                .fill(Alembic.accentSoft.opacity(0.35))
+            RoundedRectangle(cornerRadius: AlembicMetrics.r2, style: .continuous)
+                .fill(Alembic.accentSoft.opacity(0.55))
         )
         .overlay(
-            RoundedRectangle(cornerRadius: AlembicMetrics.radiusInner, style: .continuous)
-                .strokeBorder(Alembic.border.opacity(0.5), lineWidth: AlembicMetrics.hairline)
+            RoundedRectangle(cornerRadius: AlembicMetrics.r2, style: .continuous)
+                .strokeBorder(Color.inputBorder, lineWidth: AlembicMetrics.hairline)
         )
     }
 
     private var actionRow: some View {
         HStack(spacing: 10) {
-            Button(role: .cancel) {
+            GlassButton("Cancel", style: .smoke) {
                 model.cancel()
-            } label: {
-                Label("Cancel", systemImage: "xmark")
             }
             .keyboardShortcut(.cancelAction)
-            .buttonStyle(.bordered)
 
             Spacer()
 
-            Button {
+            GlassButton("Retry", style: .smoke) {
                 model.retry()
-            } label: {
-                Label("Retry", systemImage: "arrow.clockwise")
             }
             .keyboardShortcut("r", modifiers: .command)
-            .buttonStyle(.bordered)
 
-            // Accept is the primary affordance: gold, filled, to stand apart
-            // from the green accent used elsewhere.
-            Button {
+            // Accept is the primary affordance: gold, to stand apart from the
+            // green accent used elsewhere (retained per Alembic convention).
+            GlassButton("Accept", style: .gold, disabled: disableAccept) {
                 model.accept()
-            } label: {
-                Label("Accept", systemImage: "checkmark")
-                    .foregroundStyle(Color(red: 0.16, green: 0.14, blue: 0.06))
             }
             .keyboardShortcut(.defaultAction)
-            .disabled(disableAccept)
-            .buttonStyle(.borderedProminent)
-            .tint(Alembic.gold)
         }
     }
 
     private var disableAccept: Bool {
         switch model.phase {
-        case .completed, .streaming: return model.rewrite.isEmpty
-        case .emptySelection, .error: return true
+        case .completed: return model.rewrite.isEmpty
+        // Accept stays disabled until the stream finishes, so a partial paste
+        // with zero logged tokens is impossible (B5).
+        case .streaming, .emptySelection, .error: return true
         }
     }
 }
@@ -494,12 +504,20 @@ public final class RewritePanelController {
         )
         panel.contentViewController = hosting
         panel.setContentSize(hosting.view.fittingSize)
+        // Drag-to-select in the reading panes must not drag the whole window
+        // (F7): disable background dragging on the review surface specifically.
+        panel.isMovableByWindowBackground = false
+        // Click-away dismissal: clicking back into the target app cancels the
+        // review instead of leaving the panel stuck on top (B1). Detached in
+        // `close()` so Accept/Cancel/Esc do not re-fire cancel.
+        panel.onResignKey = { [weak model] in model?.cancel() }
         centre(panel)
         panel.makeKeyAndOrderFront(nil)
         self.panel = panel
     }
 
     public func close() {
+        panel?.onResignKey = nil
         panel?.orderOut(nil)
         panel = nil
     }

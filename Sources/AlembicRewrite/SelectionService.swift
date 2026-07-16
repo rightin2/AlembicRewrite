@@ -25,8 +25,9 @@ public final class SelectionService: SelectionServicing {
     private let keyV: CGKeyCode = CGKeyCode(kVK_ANSI_V)
 
     /// How long to wait for the target app to answer a synthetic Cmd+C before
-    /// giving up and treating the selection as empty.
-    private let captureTimeout: TimeInterval = 1.0
+    /// giving up and treating the selection as empty. Set generously so a slow
+    /// app answering in over a second is not misread as an empty selection (B9).
+    private let captureTimeout: TimeInterval = 2.0
     /// Polling granularity while waiting for the pasteboard changeCount to move.
     private let pollInterval: TimeInterval = 0.01
     /// Grace period after Cmd+V before restoring the prior clipboard, so the

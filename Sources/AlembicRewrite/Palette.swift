@@ -36,6 +36,15 @@ public final class PaletteViewModel: ObservableObject {
     /// Fired when the user dismisses the palette (Esc).
     public var onCancel: (() -> Void)?
 
+    /// Pointer location captured at the last keyboard navigation or filter
+    /// mutation. Hover-select is suppressed until the pointer actually moves
+    /// away from it, so list auto-scroll under a stationary cursor cannot yank
+    /// the selection back toward the row under the mouse (B2).
+    private var hoverLockLocation: CGPoint?
+    /// Current pointer location in screen space. Injectable so hover-vs-arrow
+    /// gating is unit-testable without a real mouse.
+    var currentMouseLocation: () -> CGPoint = { NSEvent.mouseLocation }
+
     public init(styles: [Style] = []) {
         self.styles = styles
     }
@@ -55,22 +64,30 @@ public final class PaletteViewModel: ObservableObject {
     func moveDown() {
         guard !filtered.isEmpty else { return }
         selectedIndex = min(selectedIndex + 1, filtered.count - 1)
+        lockHover()
     }
 
     func moveUp() {
         guard !filtered.isEmpty else { return }
         selectedIndex = max(selectedIndex - 1, 0)
+        lockHover()
     }
 
     func appendCharacters(_ characters: String) {
         filter += characters
-        clampSelection()
+        // The filter reordered/shrank the list; always put the highlight on the
+        // top result so Return can never run a middle row the user did not aim
+        // at (B3). Lock hover so the list settling under a stationary cursor
+        // cannot immediately override this (B2).
+        selectedIndex = 0
+        lockHover()
     }
 
     func deleteBackward() {
         guard !filter.isEmpty else { return }
         filter.removeLast()
-        clampSelection()
+        selectedIndex = 0
+        lockHover()
     }
 
     func submit() {
@@ -86,12 +103,18 @@ public final class PaletteViewModel: ObservableObject {
         onCancel?()
     }
 
-    private func clampSelection() {
-        if filtered.isEmpty {
-            selectedIndex = 0
-        } else if selectedIndex >= filtered.count {
-            selectedIndex = filtered.count - 1
-        }
+    /// Honour a row hover only if the pointer actually moved since the last
+    /// keyboard navigation or filter change. This stops auto-scroll from
+    /// re-firing hover under a stationary cursor and fighting the arrows (B2).
+    func hover(index: Int) {
+        if let lock = hoverLockLocation, lock == currentMouseLocation() { return }
+        hoverLockLocation = nil
+        guard filtered.indices.contains(index) else { return }
+        selectedIndex = index
+    }
+
+    private func lockHover() {
+        hoverLockLocation = currentMouseLocation()
     }
 }
 
@@ -99,6 +122,8 @@ public final class PaletteViewModel: ObservableObject {
 
 public struct PaletteView: View {
     @ObservedObject private var model: PaletteViewModel
+    @State private var blinkOn = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     public init(model: PaletteViewModel) {
         self.model = model
@@ -110,46 +135,79 @@ public struct PaletteView: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            searchHeader
-            Divider()
-            results
+        GlassPanel(radius: AlembicMetrics.r3, material: .popover) {
+            VStack(alignment: .leading, spacing: 0) {
+                searchHeader
+                Rectangle()
+                    .fill(Color.hairline)
+                    .frame(height: AlembicMetrics.hairline)
+                results
+            }
         }
         .frame(width: 360)
-        .background(VisualEffectBackground(material: .popover))
-        .clipShape(RoundedRectangle(cornerRadius: AlembicMetrics.radius, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: AlembicMetrics.radius, style: .continuous)
-                .strokeBorder(Alembic.border.opacity(0.6), lineWidth: AlembicMetrics.hairline)
-        )
         .tint(Alembic.accent)
     }
 
     private var searchHeader: some View {
         HStack(spacing: 8) {
             Image(systemName: "magnifyingglass")
-                .foregroundStyle(Alembic.accent)
-            if model.filter.isEmpty {
-                Text("Filter styles…")
-                    .foregroundStyle(Alembic.inkMuted)
-            } else {
-                Text(model.filter)
-                    .foregroundStyle(Alembic.ink)
+                .foregroundStyle(Alembic.accentVibrant)
+                .shadow(color: AlembicUnderglow.glowColor, radius: AlembicUnderglow.glowRadius)
+            HStack(spacing: 2) {
+                if model.filter.isEmpty {
+                    Text("Filter styles")
+                        .font(.alTitle)
+                        .foregroundStyle(Color.mutedBase)
+                } else {
+                    Text(model.filter)
+                        .font(.alTitle)
+                        .foregroundStyle(Color.inkBase)
+                }
+                caret
             }
-            Spacer()
+            Spacer(minLength: 8)
+            Text("\(model.filtered.count) of \(model.styles.count)")
+                .font(.alState)
+                .tracking(0.8)
+                .foregroundStyle(Color.mutedBase)
         }
-        .font(.alembicDisplay(19, weight: .regular))
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+    }
+
+    /// Blinking accent caret so the static filter reads as a live input (F8).
+    private var caret: some View {
+        RoundedRectangle(cornerRadius: 1, style: .continuous)
+            .fill(Alembic.accentVibrant)
+            .frame(width: 1.5, height: 16)
+            .opacity(blinkOn ? 1 : 0)
+            .onAppear {
+                guard !reduceMotion else { blinkOn = true; return }
+                withAnimation(.easeInOut(duration: 0.55).repeatForever(autoreverses: true)) {
+                    blinkOn = true
+                }
+            }
     }
 
     @ViewBuilder
     private var results: some View {
         let items = model.filtered
-        if items.isEmpty {
+        if model.styles.isEmpty {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("No styles yet")
+                    .font(.alBody)
+                    .foregroundStyle(Color.inkBase)
+                Text("Open Settings from the menu bar to add one.")
+                    .font(.alState)
+                    .tracking(0.6)
+                    .foregroundStyle(Color.mutedBase)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(16)
+        } else if items.isEmpty {
             Text("No matching styles")
-                .font(.callout)
-                .foregroundStyle(.secondary)
+                .font(.alBody)
+                .foregroundStyle(Color.mutedBase)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(16)
         } else {
@@ -162,10 +220,9 @@ public struct PaletteView: View {
                                 isSelected: index == model.selectedIndex
                             )
                             .id(index)
-                            .contentShape(Rectangle())
                             .onTapGesture { model.choose(style) }
                             .onHover { hovering in
-                                if hovering { model.selectedIndex = index }
+                                if hovering { model.hover(index: index) }
                             }
                         }
                     }
@@ -187,65 +244,32 @@ private struct PaletteRow: View {
     let isSelected: Bool
 
     var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: icon)
-                .frame(width: 18)
-                .foregroundStyle(isSelected ? Color.white : .secondary)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(style.name)
-                    .font(.body)
-                    .foregroundStyle(isSelected ? Color.white : .primary)
-                Text(style.model)
-                    .font(.caption2)
-                    .foregroundStyle(isSelected ? Color.white.opacity(0.85) : .secondary)
-            }
-            Spacer()
-            if let hotkey = style.hotkey {
-                Text(HotkeyFormatter.string(for: hotkey))
-                    .font(.caption.monospaced())
-                    .foregroundStyle(isSelected ? Color.white.opacity(0.9) : .secondary)
+        GlassListRow(selected: isSelected) {
+            HStack(spacing: 10) {
+                Text(providerGlyph)
+                    .font(.alButton)
+                    .foregroundStyle(isSelected ? Color.white : Color.accentText)
+                    .frame(width: 18)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(style.name)
+                        .font(.alBody)
+                        .foregroundStyle(isSelected ? Color.white : Color.inkBase)
+                    Text(style.model)
+                        .font(.alState)
+                        .tracking(0.6)
+                        .foregroundStyle(isSelected ? Color.white.opacity(0.85) : Color.mutedBase)
+                }
+                Spacer()
+                HotkeyGlyph(style.hotkey, color: isSelected ? Color.white.opacity(0.9) : Color.mutedBase)
             }
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 7)
-        .background(
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .fill(isSelected ? Alembic.accent : Color.clear)
-        )
     }
 
-    private var icon: String {
+    private var providerGlyph: String {
         switch style.provider {
-        case .anthropic: return "a.circle"
-        case .openai: return "o.circle"
+        case .anthropic: return "A"
+        case .openai: return "O"
         }
-    }
-}
-
-/// Renders a `Hotkey` as a compact glyph string (⌘⇧R) for the palette rows.
-/// Presentation-only; the authoritative key handling lives in HotkeyManager.
-enum HotkeyFormatter {
-    static func string(for hotkey: Hotkey) -> String {
-        var out = ""
-        // Carbon modifier bit masks.
-        if hotkey.modifiers & 0x1000 != 0 { out += "⌃" } // controlKey
-        if hotkey.modifiers & 0x0800 != 0 { out += "⌥" } // optionKey
-        if hotkey.modifiers & 0x0200 != 0 { out += "⇧" } // shiftKey
-        if hotkey.modifiers & 0x0100 != 0 { out += "⌘" } // cmdKey
-        out += keyName(hotkey.keyCode)
-        return out
-    }
-
-    // A small subset of common virtual key codes → display glyphs.
-    private static func keyName(_ code: UInt32) -> String {
-        let map: [UInt32: String] = [
-            0: "A", 11: "B", 8: "C", 2: "D", 14: "E", 3: "F", 5: "G", 4: "H",
-            34: "I", 38: "J", 40: "K", 37: "L", 46: "M", 45: "N", 31: "O",
-            35: "P", 12: "Q", 15: "R", 1: "S", 17: "T", 32: "U", 9: "V",
-            13: "W", 7: "X", 16: "Y", 6: "Z",
-            49: "Space", 36: "↩", 48: "⇥", 53: "⎋"
-        ]
-        return map[code] ?? "?"
     }
 }
 
@@ -300,12 +324,19 @@ public final class PaletteController {
             }
         }
 
+        // Click-away dismissal: if the user clicks back into their app without
+        // pressing Esc, the palette resigns key and cancels itself instead of
+        // floating on top forever (B1). Detached in `close()` so our own
+        // programmatic dismissals never re-fire cancel.
+        panel.onResignKey = { [weak model] in model?.cancel() }
+
         positionAtMouse(panel)
         panel.makeKeyAndOrderFront(nil)
         self.panel = panel
     }
 
     public func close() {
+        panel?.onResignKey = nil
         panel?.orderOut(nil)
         panel = nil
     }

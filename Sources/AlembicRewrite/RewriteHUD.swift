@@ -44,25 +44,31 @@ public final class HUDViewModel: ObservableObject {
 
 struct HUDView: View {
     @ObservedObject var model: HUDViewModel
+    @State private var shown = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        content
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
-            .background(VisualEffectBackground(material: .hudWindow))
-            .clipShape(Capsule(style: .continuous))
-            .overlay(
-                Capsule(style: .continuous)
-                    .strokeBorder(Alembic.border.opacity(0.6), lineWidth: AlembicMetrics.hairline)
-            )
-            .fixedSize()
-            .contentShape(Capsule(style: .continuous))
-            .onTapGesture {
-                if case .error(_, let sticky) = model.phase, sticky {
-                    model.onDismiss?()
-                }
+        GlassPanel(radius: AlembicMetrics.r2, material: .hudWindow) {
+            content
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+        }
+        .fixedSize()
+        .contentShape(RoundedRectangle(cornerRadius: AlembicMetrics.r2, style: .continuous))
+        .onTapGesture {
+            if case .error(_, let sticky) = model.phase, sticky {
+                model.onDismiss?()
             }
-            .tint(Alembic.accent)
+        }
+        .tint(Alembic.accent)
+        // Spring entry (section 5.4): settle-without-overshoot, suppressed under
+        // Reduce Motion.
+        .scaleEffect(shown ? 1 : 0.92)
+        .opacity(shown ? 1 : 0)
+        .onAppear {
+            guard !reduceMotion else { shown = true; return }
+            withAnimation(.spring(response: 0.28, dampingFraction: 0.9)) { shown = true }
+        }
     }
 
     @ViewBuilder
@@ -72,15 +78,15 @@ struct HUDView: View {
             HStack(spacing: 9) {
                 ProgressView()
                     .controlSize(.small)
-                Text("Rewriting…")
-                    .font(.callout.weight(.medium))
-                    .foregroundStyle(Alembic.ink)
+                Text("Rewriting")
+                    .font(.alBody)
+                    .foregroundStyle(Color.inkBase)
                 Button {
                     model.onCancel?()
                 } label: {
                     Image(systemName: "xmark")
                         .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(Alembic.inkMuted)
+                        .foregroundStyle(Color.mutedBase)
                         .frame(width: 18, height: 18)
                         .background(Circle().fill(Alembic.accentSoft.opacity(0.5)))
                 }
@@ -91,15 +97,17 @@ struct HUDView: View {
             HStack(spacing: 9) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 12))
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Alembic.warning)
                 Text(message)
-                    .font(.callout)
-                    .foregroundStyle(Alembic.ink)
+                    .font(.alBody)
+                    .foregroundStyle(Color.inkBase)
                     .frame(maxWidth: 320, alignment: .leading)
                 if sticky {
                     Text("Click to dismiss")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .font(.alState)
+                        .tracking(0.8)
+                        .textCase(.uppercase)
+                        .foregroundStyle(Color.mutedBase)
                 }
             }
         }

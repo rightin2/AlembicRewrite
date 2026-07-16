@@ -45,4 +45,13 @@ public final class HistoryStore: HistoryStoring {
     public func clear() throws {
         try JSONFile.write([HistoryEntry](), to: fileURL())
     }
+
+    /// Drop every entry older than `cutoff` (setting 3.4 date-based retention).
+    /// Rewrites the file only when something was actually removed.
+    public func prune(olderThan cutoff: Date) throws {
+        let entries = try recent()
+        let kept = entries.filter { $0.timestamp >= cutoff }
+        guard kept.count != entries.count else { return }
+        try JSONFile.write(kept, to: fileURL())
+    }
 }

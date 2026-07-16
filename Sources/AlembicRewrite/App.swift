@@ -115,6 +115,10 @@ final class WindowManager: NSObject, NSWindowDelegate {
     /// per-style hotkeys (styles may have been added, edited, or deleted).
     var onSettingsClosed: (() -> Void)?
 
+    /// Fires the real global palette hotkey from the onboarding "try it" step
+    /// (wired to `RewriteCoordinator.handleGlobalHotkey`).
+    var onTryPalette: (() -> Void)?
+
     func showSettings(env: AppEnvironment) {
         if let win = settingsWindow {
             win.makeKeyAndOrderFront(nil)
@@ -134,26 +138,28 @@ final class WindowManager: NSObject, NSWindowDelegate {
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    func showOnboarding(env: AppEnvironment) {
+    func showOnboarding(env: AppEnvironment, startAt: OnboardingStep = .welcome) {
         if let win = onboardingWindow {
             win.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
             return
         }
-        let selection = env.selection
-        let root = OnboardingView(
-            onOpenSettings: { selection.openAccessibilitySettings() },
-            onRecheck: { selection.hasAccessibilityPermission() },
-            onDismiss: { [weak self] in
-                self?.onboardingWindow?.close()
-            }
+        let root = OnboardingWizardView(
+            env: env,
+            startAt: startAt,
+            openSettings: { [weak self] in self?.showSettings(env: env) },
+            tryPalette: { [weak self] in self?.onTryPalette?() },
+            onClose: { [weak self] in self?.onboardingWindow?.close() }
         )
         let hosting = NSHostingController(rootView: root)
         let win = NSWindow(contentViewController: hosting)
-        win.title = "Welcome to Prompt Rewriter"
         win.styleMask = [.titled, .closable]
+        win.titlebarAppearsTransparent = true
+        win.titleVisibility = .hidden
+        win.isMovableByWindowBackground = true
         win.isReleasedWhenClosed = false
         win.delegate = self
+        win.setContentSize(NSSize(width: 560, height: 470))
         win.center()
         onboardingWindow = win
         win.makeKeyAndOrderFront(nil)
@@ -197,16 +203,39 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             env.setRotateBanner(true)
         }
 
-        // Gate on the Accessibility permission the selection dance needs.
-        if !env.selection.hasAccessibilityPermission() {
-            windows.showOnboarding(env: env)
+        // First-run onboarding gate (design 7.1): resume an unfinished wizard,
+        // jump straight to the permission step when onboarding is done but the
+        // permission has since dropped, or stay menu-bar-only when all is well.
+        let onboarding = OnboardingState()
+        switch OnboardingFlow.launchOutcome(
+            satisfied: onboarding.isSatisfied,
+            granted: env.selection.hasAccessibilityPermission(),
+            lastStep: onboarding.lastStep
+        ) {
+        case .show(let step):
+            windows.showOnboarding(env: env, startAt: step)
+        case .none:
+            break
         }
 
-        // Register the global palette hotkey (Cmd+Shift+R) and every per-style
-        // direct hotkey, and re-sync per-style hotkeys whenever Settings closes.
+        // Register the global palette hotkey and every per-style direct hotkey,
+        // and re-sync per-style hotkeys whenever Settings closes. The onboarding
+        // "try it" step fires the same global palette trigger.
         coordinator.registerHotkeys()
         windows.onSettingsClosed = { [weak coordinator] in
             coordinator?.syncStyleHotkeys()
+        }
+        windows.onTryPalette = { [weak coordinator] in
+            coordinator?.handleGlobalHotkey()
+        }
+    }
+
+    /// Honour history clear-on-quit and the session-only retention mode (setting
+    /// 3.4) as the app terminates.
+    func applicationWillTerminate(_ notification: Notification) {
+        let prefs = AppSettings.shared.prefs
+        if prefs.clearHistoryOnQuit || prefs.historyMode == .session {
+            try? env.historyStore.clear()
         }
     }
 }
@@ -219,65 +248,170 @@ struct MenuContent: View {
     let coordinator: RewriteCoordinator
 
     var body: some View {
-        // Cost-meter summary. Re-read on each render (NSMenu rebuilds on open).
-        let cost = env.costMeter.totalCostUSD()
-        let tokens = env.costMeter.totalTokens()
-
-        Text(String(format: "Cost: $%.4f  •  %@ tokens",
-                     cost, formattedTokens(tokens)))
-
-        Button("Reset cost meter") {
-            try? env.costMeter.reset()
-            env.bumpRefresh()
+        // `env` is observed, so the coordinator's `bumpRefresh()` after each
+        // rewrite re-renders this window live, even while it is open (F4). The
+        // stores are re-read on every render.
+        GlassPanel(radius: AlembicMetrics.r3, material: .popover) {
+            VStack(alignment: .leading, spacing: 14) {
+                spendCard
+                GlassButton("Rewrite Selection",
+                            style: .primaryFlat,
+                            large: true,
+                            trailingGlyph: HotkeyGlyph.string(for: HotkeyManager.defaultGlobalHotkey)) {
+                    coordinator.handleGlobalHotkey()
+                }
+                .frame(maxWidth: .infinity)
+                historySection
+                navSection
+            }
+            .padding(16)
         }
-
-        Divider()
-
-        Button("Rewrite Selection…") {
-            coordinator.handleGlobalHotkey()
-        }
-        // .keyboardShortcut is intentionally omitted; the real trigger is the
-        // global Carbon hotkey registered in AppDelegate.
-
-        Divider()
-
-        historyMenu
-
-        Divider()
-
-        Button("Settings…") {
-            windows.showSettings(env: env)
-        }
-        .keyboardShortcut(",", modifiers: .command)
-
-        Button("Quit Prompt Rewriter") {
-            NSApplication.shared.terminate(nil)
-        }
-        .keyboardShortcut("q", modifiers: .command)
+        .frame(width: 300)
+        .tint(Alembic.accent)
     }
 
+    // MARK: Spend
+
+    private var spendCard: some View {
+        let cost = env.costMeter.totalCostUSD()
+        let tokens = env.costMeter.totalTokens()
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                SectionHeader("Spend")
+                Spacer()
+                GlassButton("Reset", style: .quiet) {
+                    try? env.costMeter.reset()
+                    env.bumpRefresh()
+                }
+            }
+            Text(String(format: "$%.4f", cost))
+                .font(.alTitleLg)
+                .foregroundStyle(Color.inkBase)
+            Text("\(formattedTokens(tokens)) tokens")
+                .font(.alState)
+                .tracking(0.8)
+                .textCase(.uppercase)
+                .foregroundStyle(Color.mutedBase)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: AlembicMetrics.r2, style: .continuous)
+                .fill(Color.surface3.opacity(0.6))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: AlembicMetrics.r2, style: .continuous)
+                .strokeBorder(Color.hairline, lineWidth: AlembicMetrics.hairline)
+        )
+    }
+
+    // MARK: History
+
     @ViewBuilder
-    private var historyMenu: some View {
+    private var historySection: some View {
         let entries = (try? env.historyStore.recent()) ?? []
-        Menu("History") {
-            if entries.isEmpty {
-                Text("No rewrites yet")
-            } else {
-                ForEach(entries.prefix(10)) { entry in
-                    Button(menuLabel(for: entry)) {
-                        copyToClipboard(entry.result)
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                SectionHeader("History")
+                Spacer()
+                if !entries.isEmpty {
+                    GlassButton("Clear", style: .quiet) {
+                        try? env.historyStore.clear()
+                        env.bumpRefresh()
                     }
                 }
+            }
+            if entries.isEmpty {
+                Text("No rewrites yet")
+                    .font(.alBody)
+                    .foregroundStyle(Color.mutedBase)
+                    .padding(.vertical, 4)
+            } else {
+                ScrollView {
+                    VStack(spacing: 2) {
+                        ForEach(entries.prefix(10)) { entry in
+                            GlassListRow {
+                                historyRow(entry)
+                            }
+                            .onTapGesture { copyToClipboard(entry.result) }
+                        }
+                    }
+                }
+                .frame(maxHeight: 240)
             }
         }
     }
 
-    private func menuLabel(for entry: HistoryEntry) -> String {
-        let snippet = entry.result
+    private func historyRow(_ entry: HistoryEntry) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 6) {
+                Text(entry.styleName)
+                    .font(.alBody)
+                    .foregroundStyle(Color.inkBase)
+                    .lineLimit(1)
+                Spacer(minLength: 6)
+                Text(timestamp(entry.timestamp))
+                    .font(.alState)
+                    .tracking(0.6)
+                    .foregroundStyle(Color.mutedBase)
+            }
+            Text(snippet(entry.result))
+                .font(.alState)
+                .tracking(0.4)
+                .foregroundStyle(Color.mutedBase)
+                .lineLimit(1)
+            Text("\(entry.inputTokens + entry.outputTokens) tokens")
+                .font(.alState)
+                .tracking(0.6)
+                .textCase(.uppercase)
+                .foregroundStyle(Color.mutedBase.opacity(0.8))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .help("Click to copy the result")
+    }
+
+    // MARK: Navigation
+
+    private var navSection: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Rectangle()
+                .fill(Color.hairline)
+                .frame(height: AlembicMetrics.hairline)
+                .padding(.bottom, 6)
+            // Undo the last rewrite (setting 3.7). Shown only while the stashed
+            // original is still inside its undo window.
+            if coordinator.canUndo {
+                GlassButton("Undo last rewrite", style: .quiet) {
+                    coordinator.undoLastRewrite()
+                    env.bumpRefresh()
+                }
+            }
+            GlassButton("Replay setup walkthrough", style: .quiet) {
+                windows.showOnboarding(env: env, startAt: .welcome)
+            }
+            GlassButton("Settings", style: .quiet) {
+                windows.showSettings(env: env)
+            }
+            GlassButton("Quit Prompt Rewriter", style: .quiet) {
+                NSApplication.shared.terminate(nil)
+            }
+        }
+    }
+
+    // MARK: Helpers
+
+    private func snippet(_ text: String) -> String {
+        let flat = text
             .replacingOccurrences(of: "\n", with: " ")
             .trimmingCharacters(in: .whitespaces)
-        let clipped = snippet.count > 48 ? String(snippet.prefix(48)) + "…" : snippet
-        return "\(entry.styleName): \(clipped)"
+        return flat.count > 48 ? String(flat.prefix(48)) + "…" : flat
+    }
+
+    private func timestamp(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.dateFormat = "d MMM, h:mm a"
+        return f.string(from: date)
     }
 
     private func copyToClipboard(_ text: String) {
@@ -316,6 +450,6 @@ struct AlembicRewriteApp: App {
                 Image(systemName: "wand.and.stars")
             }
         }
-        .menuBarExtraStyle(.menu)
+        .menuBarExtraStyle(.window)
     }
 }

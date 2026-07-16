@@ -283,6 +283,44 @@ final class DataTests: XCTestCase {
         XCTAssertEqual(meter.totalCostUSD(), 0.0)
     }
 
+    // MARK: - CostMeter month-to-date (setting 3.3 spend cap)
+
+    func testCostMeterMonthToDateMatchesCurrentMonthSpend() throws {
+        let meter = CostMeter(directory: tmpDir)
+        // 200k in / 100k out on gpt-4o: 0.2*$2.5 + 0.1*$10 = $1.5, this month.
+        try meter.record(UsageRecord(provider: .openai, model: "gpt-4o", inputTokens: 200_000, outputTokens: 100_000))
+        XCTAssertEqual(meter.monthToDateCostUSD(), 1.5, accuracy: 1e-9)
+    }
+
+    func testCostMeterResetPreservesMonthToDate() throws {
+        // The display reset must not defeat the spend cap: month-to-date survives.
+        let meter = CostMeter(directory: tmpDir)
+        try meter.record(UsageRecord(provider: .openai, model: "gpt-4o", inputTokens: 200_000, outputTokens: 100_000))
+        try meter.reset()
+        XCTAssertEqual(meter.totalCostUSD(), 0.0)
+        XCTAssertEqual(meter.monthToDateCostUSD(), 1.5, accuracy: 1e-9)
+    }
+
+    // MARK: - HistoryStore prune (setting 3.4 retention)
+
+    func testHistoryPruneDropsEntriesOlderThanCutoff() throws {
+        let store = HistoryStore(directory: tmpDir)
+        let old = HistoryEntry(
+            original: "a", result: "A", styleName: "s", provider: .anthropic,
+            model: "claude-haiku-4-5", timestamp: Date().addingTimeInterval(-10 * 86_400),
+            inputTokens: 1, outputTokens: 1)
+        let fresh = HistoryEntry(
+            original: "b", result: "B", styleName: "s", provider: .anthropic,
+            model: "claude-haiku-4-5", timestamp: Date(),
+            inputTokens: 1, outputTokens: 1)
+        try store.add(old)
+        try store.add(fresh)
+        try store.prune(olderThan: Date().addingTimeInterval(-5 * 86_400))
+        let kept = try store.recent()
+        XCTAssertEqual(kept.count, 1)
+        XCTAssertEqual(kept.first?.result, "B")
+    }
+
     func testCostMeterPersistsAcrossInstances() throws {
         let m1 = CostMeter(directory: tmpDir)
         try m1.record(UsageRecord(provider: .openai, model: "gpt-4o", inputTokens: 1_000_000, outputTokens: 0))

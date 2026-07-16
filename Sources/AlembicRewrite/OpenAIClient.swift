@@ -24,6 +24,7 @@ public struct OpenAIClient: LLMClienting {
         messages: [ChatMessage],
         model: String,
         temperature: Double,
+        maxTokens: Int,
         apiKey: String,
         onUsage: @escaping @Sendable (_ inputTokens: Int, _ outputTokens: Int) -> Void
     ) -> AsyncThrowingStream<String, Error> {
@@ -37,6 +38,7 @@ public struct OpenAIClient: LLMClienting {
                         messages: messages,
                         model: model,
                         temperature: temperature,
+                        maxTokens: maxTokens,
                         apiKey: apiKey
                     )
                     let bytes = try await LLMTransport.openStream(request)
@@ -81,6 +83,7 @@ public struct OpenAIClient: LLMClienting {
         messages: [ChatMessage],
         model: String,
         temperature: Double,
+        maxTokens: Int,
         apiKey: String
     ) throws -> URLRequest {
         var request = URLRequest(url: URL(string: "https://api.openai.com/v1/chat/completions")!)
@@ -92,6 +95,7 @@ public struct OpenAIClient: LLMClienting {
         let body: [String: Any] = [
             "model": model,
             "temperature": temperature,
+            "max_tokens": maxTokens,
             "stream": true,
             "stream_options": ["include_usage": true],
             "messages": turns

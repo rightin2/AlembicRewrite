@@ -16,6 +16,18 @@
     "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/App.swiftdeps",
     "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/App.dia"
   },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/AppSettings.swift": {
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/AppSettings.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/AppSettings~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/AppSettings.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/AppSettings.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/Components.swift": {
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/Components.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/Components~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/Components.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/Components.dia"
+  },
   "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/CostMeter.swift": {
     "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/CostMeter.swift.o",
     "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/CostMeter~partial.swiftmodule",
@@ -57,6 +69,12 @@
     "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/Onboarding~partial.swiftmodule",
     "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/Onboarding.swiftdeps",
     "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/Onboarding.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/OnboardingFlow.swift": {
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/OnboardingFlow.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/OnboardingFlow~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/OnboardingFlow.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/OnboardingFlow.dia"
   },
   "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Sources/AlembicRewrite/OpenAIClient.swift": {
     "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewrite.build/OpenAIClient.swift.o",

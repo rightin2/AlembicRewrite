@@ -78,6 +78,22 @@ public struct Style: Codable, Identifiable, Hashable, Sendable {
     /// runs the rewrite silently and pastes the result over the selection with
     /// no panel. Palette-launched rewrites always show the panel regardless.
     public var alwaysReview: Bool
+    /// Maximum output tokens for this style's completions (setting 3.8). Caps the
+    /// single biggest per-call cost lever; a "tighten this" style never emits 4k
+    /// tokens. Defaults to `Style.defaultMaxTokens` (1024). Legacy styles decode
+    /// the missing field to that default via `decodeIfPresent`.
+    ///
+    /// INTEGRATION(max-tokens): the integrator threads this into each backend at
+    /// dispatch time. The Anthropic Messages API requires `max_tokens`; OpenAI
+    /// accepts `max_tokens`. `LLMClienting.stream` does not currently carry it,
+    /// so the integrator either extends that call or has the coordinator read
+    /// `style.maxTokens` when building the request. Data + UI live here; the wire
+    /// threading is the integrator's step.
+    public var maxTokens: Int
+
+    /// Default per-style output-token cap when none is set or when decoding a
+    /// style persisted before `maxTokens` existed.
+    public static let defaultMaxTokens = 1024
 
     public init(
         id: UUID = UUID(),
@@ -89,7 +105,8 @@ public struct Style: Codable, Identifiable, Hashable, Sendable {
         hotkey: Hotkey? = nil,
         sortOrder: Int,
         createdAt: Date = Date(),
-        alwaysReview: Bool = false
+        alwaysReview: Bool = false,
+        maxTokens: Int = Style.defaultMaxTokens
     ) {
         self.id = id
         self.name = name
@@ -101,15 +118,16 @@ public struct Style: Codable, Identifiable, Hashable, Sendable {
         self.sortOrder = sortOrder
         self.createdAt = createdAt
         self.alwaysReview = alwaysReview
+        self.maxTokens = maxTokens
     }
 
     private enum CodingKeys: String, CodingKey {
         case id, name, promptTemplate, provider, model, temperature
-        case hotkey, sortOrder, createdAt, alwaysReview
+        case hotkey, sortOrder, createdAt, alwaysReview, maxTokens
     }
 
-    /// Custom decoder so styles persisted before `alwaysReview` existed decode
-    /// cleanly, defaulting the missing field to `false`.
+    /// Custom decoder so styles persisted before `alwaysReview` / `maxTokens`
+    /// existed decode cleanly, defaulting the missing fields.
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try c.decode(UUID.self, forKey: .id)
@@ -122,6 +140,7 @@ public struct Style: Codable, Identifiable, Hashable, Sendable {
         self.sortOrder = try c.decode(Int.self, forKey: .sortOrder)
         self.createdAt = try c.decode(Date.self, forKey: .createdAt)
         self.alwaysReview = try c.decodeIfPresent(Bool.self, forKey: .alwaysReview) ?? false
+        self.maxTokens = try c.decodeIfPresent(Int.self, forKey: .maxTokens) ?? Style.defaultMaxTokens
     }
 }
 
@@ -235,6 +254,9 @@ public protocol HistoryStoring: AnyObject {
     /// Append an entry, trimming the oldest beyond the 200-entry cap.
     func add(_ entry: HistoryEntry) throws
     func clear() throws
+    /// Remove every entry older than `cutoff` (setting 3.4 date-based retention).
+    /// A no-op when nothing is older. Runs beside the existing count cap.
+    func prune(olderThan cutoff: Date) throws
 }
 
 /// Running token + dollar tally, resettable, shown in the menu-bar dropdown.
@@ -244,6 +266,10 @@ public protocol CostMetering: AnyObject {
     func record(_ usage: UsageRecord) throws
     /// Cumulative dollar cost since the last reset, priced via `PriceTable`.
     func totalCostUSD() -> Double
+    /// Dollar cost for the current calendar month, priced via `PriceTable`.
+    /// Independent of `reset()` so the spend cap (setting 3.3) keeps tracking
+    /// across a display reset; rolls over on its own at month boundaries.
+    func monthToDateCostUSD() -> Double
     /// Cumulative input + output tokens since the last reset.
     func totalTokens() -> Int
     /// Zero the tally.
@@ -272,6 +298,8 @@ public protocol LLMClienting: Sendable {
     ///   - messages: Ordered conversation turns (system/user/assistant).
     ///   - model: Model identifier from the `Style`.
     ///   - temperature: Sampling temperature from the `Style`.
+    ///   - maxTokens: Maximum output tokens from the `Style` (setting 3.8).
+    ///     Anthropic requires `max_tokens`; OpenAI accepts it.
     ///   - apiKey: BYOK key for this provider, read from Keychain by the caller.
     ///   - onUsage: Invoked once with the turn's token usage (input/output).
     /// - Returns: An async stream of text deltas.
@@ -279,6 +307,7 @@ public protocol LLMClienting: Sendable {
         messages: [ChatMessage],
         model: String,
         temperature: Double,
+        maxTokens: Int,
         apiKey: String,
         onUsage: @escaping @Sendable (_ inputTokens: Int, _ outputTokens: Int) -> Void
     ) -> AsyncThrowingStream<String, Error>

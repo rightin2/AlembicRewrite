@@ -1,5 +1,7 @@
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/AnthropicClient.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/App.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/AppSettings.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Components.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/CostMeter.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/DesignTokens.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/HistoryStore.swift.o
@@ -7,6 +9,7 @@
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/KeychainStore.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/LLMClient.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Onboarding.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/OnboardingFlow.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/OpenAIClient.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/Palette.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/PriceTable.swift.o
@@ -19,5 +22,8 @@
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/StyleStore.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewrite.build/resource_bundle_accessor.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewritePackageTests.build/runner.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/AppSettingsTests.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/BugFixTests.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/DataTests.swift.o
+/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/OnboardingFlowTests.swift.o
 /Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/debug/AlembicRewriteTests.build/PlaceholderTests.swift.o

@@ -19,16 +19,13 @@
 import Foundation
 
 public struct AnthropicClient: LLMClienting {
-    /// Anthropic requires an explicit max_tokens. Rewrites are short; this cap
-    /// is generous headroom, not a target length.
-    private let maxTokens = 4096
-
     public init() {}
 
     public func stream(
         messages: [ChatMessage],
         model: String,
         temperature: Double,
+        maxTokens: Int,
         apiKey: String,
         onUsage: @escaping @Sendable (_ inputTokens: Int, _ outputTokens: Int) -> Void
     ) -> AsyncThrowingStream<String, Error> {
@@ -42,6 +39,7 @@ public struct AnthropicClient: LLMClienting {
                         messages: messages,
                         model: model,
                         temperature: temperature,
+                        maxTokens: maxTokens,
                         apiKey: apiKey
                     )
                     let bytes = try await LLMTransport.openStream(request)
@@ -97,6 +95,7 @@ public struct AnthropicClient: LLMClienting {
         messages: [ChatMessage],
         model: String,
         temperature: Double,
+        maxTokens: Int,
         apiKey: String
     ) throws -> URLRequest {
         var request = URLRequest(url: URL(string: "https://api.anthropic.com/v1/messages")!)
