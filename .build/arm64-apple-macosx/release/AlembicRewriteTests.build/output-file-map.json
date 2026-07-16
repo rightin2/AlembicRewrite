@@ -1,0 +1,19 @@
+{
+  "": {
+    "dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/AlembicRewriteTests.d",
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/AlembicRewriteTests.o",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/primary.swiftdeps"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/AlembicRewriteTests/DataTests.swift": {
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/DataTests.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/DataTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/DataTests.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/DataTests.dia"
+  },
+  "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/Tests/AlembicRewriteTests/PlaceholderTests.swift": {
+    "object": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/PlaceholderTests.swift.o",
+    "swiftmodule": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/PlaceholderTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/PlaceholderTests.swiftdeps",
+    "diagnostics": "/Users/jean-lucalder/Desktop/Claude/prompt-rewriter/.build/arm64-apple-macosx/release/AlembicRewriteTests.build/PlaceholderTests.dia"
+  }
+}
