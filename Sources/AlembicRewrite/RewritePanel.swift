@@ -218,6 +218,7 @@ public final class RewritePanelViewModel: ObservableObject {
 public struct RewritePanelView: View {
     @ObservedObject private var model: RewritePanelViewModel
     @FocusState private var iterateFocused: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     public init(model: RewritePanelViewModel) {
         self.model = model
@@ -342,7 +343,7 @@ public struct RewritePanelView: View {
             SectionHeader("Original")
             readingPane {
                 ScrollView {
-                    Text(model.original.isEmpty ? "—" : model.original)
+                    Text(model.original.isEmpty ? "Nothing captured" : model.original)
                         .font(.alBody)
                         .foregroundStyle(Color.mutedBase)
                         .textSelection(.enabled)
@@ -391,8 +392,15 @@ public struct RewritePanelView: View {
                         }
                     }
                     .onChange(of: model.rewrite) { _ in
-                        withAnimation(.linear(duration: 0.1)) {
+                        // Reduce Motion gate (UI-22): follow the streaming tail
+                        // without animation when the user has asked for it, matching
+                        // every other animation in the app.
+                        if reduceMotion {
                             proxy.scrollTo("rewrite-bottom", anchor: .bottom)
+                        } else {
+                            withAnimation(.linear(duration: 0.1)) {
+                                proxy.scrollTo("rewrite-bottom", anchor: .bottom)
+                            }
                         }
                     }
                 }
@@ -503,6 +511,11 @@ public final class RewritePanelController {
             contentRect: NSRect(x: 0, y: 0, width: 520, height: 420)
         )
         panel.contentViewController = hosting
+        // UI-6: let the hosting controller keep the panel sized to its content, so
+        // when the stream completes and the iterate field appears the window grows
+        // instead of clipping. Without this NSHostingController does not resize the
+        // panel after the initial fittingSize snapshot.
+        hosting.sizingOptions = [.preferredContentSize]
         panel.setContentSize(hosting.view.fittingSize)
         // Drag-to-select in the reading panes must not drag the whole window
         // (F7): disable background dragging on the review surface specifically.

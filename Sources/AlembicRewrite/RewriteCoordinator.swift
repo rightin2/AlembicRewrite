@@ -125,7 +125,8 @@ final class RewriteCoordinator {
     func handleGlobalHotkey() {
         guard ensurePermission() else { return }
         let styles = (try? env.styleStore.all()) ?? []
-        guard !styles.isEmpty else { return }
+        // Open the palette even with zero styles so its "No styles yet" empty
+        // state renders (UI-7); guarding on emptiness made the hotkey feel dead.
 
         let vm = PaletteViewModel(styles: styles)
         vm.onSelect = { [weak self] style in

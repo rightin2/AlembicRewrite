@@ -67,29 +67,47 @@ struct FrostedBackground: NSViewRepresentable {
 /// .frame(width: 360)
 /// ```
 struct GlassPanel<Content: View>: View {
-    var radius: CGFloat = AlembicMetrics.r3
-    var material: NSVisualEffectView.Material = .hudWindow
+    /// The ratified surface recipe (`.regular`, `.clear`, `.smoke`) that drives
+    /// material, tint, rim, top specular, radius, and shadow tier. Defaults to
+    /// `.regular` (chrome).
+    var recipe: GlassRecipe = .regular
+    /// Optional per-call radius override. `nil` uses `recipe.radius`.
+    var radiusOverride: CGFloat? = nil
+    /// Optional per-call material override. `nil` uses `recipe.material`.
+    var materialOverride: NSVisualEffectView.Material? = nil
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
-    @Environment(\.colorScheme) private var scheme
     let content: () -> Content
 
-    init(radius: CGFloat = AlembicMetrics.r3,
-         material: NSVisualEffectView.Material = .hudWindow,
+    /// Recipe-first initialiser: pick a ratified surface and (optionally) nudge
+    /// its radius or material. Preferred for new callers.
+    init(recipe: GlassRecipe = .regular,
+         radius: CGFloat? = nil,
+         material: NSVisualEffectView.Material? = nil,
          @ViewBuilder content: @escaping () -> Content) {
-        self.radius = radius
-        self.material = material
+        self.recipe = recipe
+        self.radiusOverride = radius
+        self.materialOverride = material
         self.content = content
     }
+
+    /// Effective radius: explicit override, else the recipe's.
+    private var radius: CGFloat { radiusOverride ?? recipe.radius }
+    /// Effective material: explicit override, else the recipe's (nil = solid
+    /// smoke card with no live blur).
+    private var material: NSVisualEffectView.Material? { materialOverride ?? recipe.material }
 
     var body: some View {
         content()
             .background {
+                let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
                 if reduceTransparency {
-                    RoundedRectangle(cornerRadius: radius, style: .continuous)
-                        .fill(Color.surface2)
-                } else {
+                    shape.fill(Color.surface2)
+                } else if let material {
                     FrostedBackground(material: material)
-                        .overlay(Color.paperTint.opacity(0.42))
+                        .overlay(recipe.tint.opacity(recipe.tintOpacity))
+                } else {
+                    // Smoke: warm solid tint rather than a live blur.
+                    shape.fill(recipe.tint.opacity(recipe.tintOpacity))
                 }
             }
             // Asymmetric specular rim: full top specular fading to centre.
@@ -97,20 +115,19 @@ struct GlassPanel<Content: View>: View {
                 RoundedRectangle(cornerRadius: radius, style: .continuous)
                     .stroke(
                         LinearGradient(
-                            colors: [Color.white.opacity(0.6), .clear],
+                            colors: [recipe.topSpecular, .clear],
                             startPoint: .top, endPoint: .center),
-                        lineWidth: 1)
+                        lineWidth: recipe.rimWidth)
                     .opacity(reduceTransparency ? 0 : 1)
             )
             // Hairline glass rim around the whole edge.
             .overlay(
                 RoundedRectangle(cornerRadius: radius, style: .continuous)
-                    .strokeBorder(Color.glassRim, lineWidth: 1)
+                    .strokeBorder(recipe.rim, lineWidth: recipe.rimWidth)
                     .opacity(reduceTransparency ? 0 : 1)
             )
             .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
-            .shadow(color: .black.opacity(scheme == .dark ? 0.45 : 0.22),
-                    radius: scheme == .dark ? 30 : 24, x: 0, y: 10)
+            .alShadow(recipe.shadow)
     }
 }
 
@@ -200,15 +217,13 @@ struct GlassButton: View {
         )
     }
 
-    // Warning-adjacent gold uses a near-black label (#3a2e08).
-    private static let goldLabel = Color(red: 0x3a / 255, green: 0x2e / 255, blue: 0x08 / 255)
-
     private var labelColor: Color {
         switch style {
         case .primaryFlat:   return Color.onAccent
         case .primaryLiquid: return .white
         case .smoke:         return Color.inkBase
-        case .gold:          return Self.goldLabel
+        // Warning-adjacent gold uses the near-black on-gold label token (#3a2e08).
+        case .gold:          return Color.onGold
         case .danger:        return Color.onDanger
         case .quiet:         return Alembic.accent
         }
@@ -231,7 +246,9 @@ struct GlassButton: View {
         case .danger:
             Color.dangerBtnBg
         case .quiet:
-            Color.clear
+            // Quiet sits on a clear background, so brightness alone barely shifts
+            // the label. Give it a real hover fill inside the r2 shape instead.
+            hovering && !disabled ? Color.hoverFill : Color.clear
         }
     }
 
@@ -301,7 +318,7 @@ struct GlassListRow<Content: View>: View {
 
     var body: some View {
         content()
-            .foregroundStyle(selected ? Color.white : Color.inkBase)
+            .foregroundStyle(selected ? Color.onAccent : Color.inkBase)
             .padding(.vertical, 8)
             .padding(.horizontal, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -315,7 +332,7 @@ struct GlassListRow<Content: View>: View {
 
     private var fill: Color {
         if selected { return Alembic.accent }
-        if hovering { return Color.white.opacity(0.07) }
+        if hovering { return Color.hoverFill }
         return .clear
     }
 }
@@ -396,18 +413,21 @@ struct InputField: View {
                 .scrollContentBackground(.hidden)
                 .frame(minHeight: minHeight > 0 ? minHeight : nil, alignment: .topLeading)
                 .focused($focused)
+                .focusEffectDisabled()
         } else if secure {
             SecureField("", text: $text)
                 .textFieldStyle(.plain)
                 .font(font)
                 .foregroundStyle(Color.inkBase)
                 .focused($focused)
+                .focusEffectDisabled()
         } else {
             TextField("", text: $text)
                 .textFieldStyle(.plain)
                 .font(font)
                 .foregroundStyle(Color.inkBase)
                 .focused($focused)
+                .focusEffectDisabled()
         }
     }
 }
@@ -525,7 +545,7 @@ struct StatusBadge: View {
     private var fill: Color {
         switch kind {
         case .ready:     return Color.accentSoft
-        case .streaming: return Alembic.dynamic(light: 0xe6ddcb, dark: 0x453a20)
+        case .streaming: return Color.warningSoft
         case .error:     return Color.danger.opacity(0.15)
         case .empty:     return .clear
         }

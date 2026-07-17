@@ -2,6 +2,7 @@
 # Packages AlembicRewrite.app into a distributable DMG at dist/AlembicRewrite.dmg
 set -e
 cd "$(dirname "$0")/.."
+VERSION="$(cat VERSION)"
 
 # Fresh app bundle straight from source
 ./scripts/make-app.sh
@@ -41,5 +42,5 @@ except your own direct API calls to the provider you configure.
 TXT
 
 rm -f dist/AlembicRewrite.dmg
-hdiutil create -volname "AlembicRewrite" -srcfolder "$STAGE" -ov -format UDZO dist/AlembicRewrite.dmg >/dev/null
-echo "Wrote dist/AlembicRewrite.dmg ($(du -h dist/AlembicRewrite.dmg | cut -f1))"
+hdiutil create -volname "AlembicRewrite $VERSION" -srcfolder "$STAGE" -ov -format UDZO dist/AlembicRewrite.dmg >/dev/null
+echo "Wrote dist/AlembicRewrite.dmg (version $VERSION, $(du -h dist/AlembicRewrite.dmg | cut -f1))"

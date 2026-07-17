@@ -2,7 +2,7 @@
 //  Onboarding.swift
 //  AlembicRewrite
 //
-//  The resumable onboarding wizard (design section 7). A single 560x470 window
+//  The resumable onboarding wizard (design section 7). A single 560x540 window
 //  whose root content swaps between seven stages (welcome, permission, API key,
 //  guided first rewrite, palette/panel tour, settings tour, finish). Progress is
 //  persisted through OnboardingState (OnboardingFlow.swift), so quitting mid-flow
@@ -14,9 +14,7 @@
 //  ---------------------------------------------------------------------------
 //  INTEGRATION (App.swift, owned by the app-shell integrator, not this file)
 //  ---------------------------------------------------------------------------
-//  Three one-liners wire the wizard in. The legacy `OnboardingView` below is
-//  kept only so the current App.swift compiles unchanged; swap these in to go
-//  live, then delete `OnboardingView`.
+//  Three one-liners wire the wizard in.
 //
 //  1. WindowManager.showOnboarding gains a `startAt:` param, hides the title bar,
 //     and hosts the wizard:
@@ -37,7 +35,7 @@
 //            win.isMovableByWindowBackground = true
 //            win.isReleasedWhenClosed = false
 //            win.delegate = self
-//            win.setContentSize(NSSize(width: 560, height: 470))
+//            win.setContentSize(NSSize(width: 560, height: 540))
 //            win.center()
 //            onboardingWindow = win
 //            win.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true)
@@ -375,7 +373,7 @@ struct OnboardingWizardView: View {
             Text("Add an API key")
                 .font(.alTitleLg)
                 .foregroundStyle(Color.inkBase)
-            Text("AlembicRewrite uses your own key. It is stored in your macOS Keychain and never leaves this machine. Add at least one to continue.")
+            Text("AlembicRewrite uses your own key. It is stored in a private file in the app's Application Support folder, readable only by your user account, and never leaves this machine. Add at least one to continue.")
                 .font(.alBody)
                 .foregroundStyle(Color.inkBase)
                 .fixedSize(horizontal: false, vertical: true)
@@ -506,7 +504,7 @@ struct OnboardingWizardView: View {
                         Spacer()
                         miniButton("Cancel", tint: Color.surface3, fg: Color.inkBase)
                         miniButton("Retry", tint: Color.surface3, fg: Color.inkBase)
-                        miniButton("Accept", tint: Alembic.gold, fg: Self.goldMockLabel)
+                        miniButton("Accept", tint: Alembic.gold, fg: Color.onGold)
                     }
                 }
                 .padding(10)
@@ -518,7 +516,7 @@ struct OnboardingWizardView: View {
 
     private func previewRow(_ name: String, selected: Bool) -> some View {
         HStack {
-            Text(name).font(.alBody).foregroundStyle(selected ? .white : Color.inkBase)
+            Text(name).font(.alBody).foregroundStyle(selected ? Color.onAccent : Color.inkBase)
             Spacer()
         }
         .padding(.vertical, 6).padding(.horizontal, 10)
@@ -530,18 +528,13 @@ struct OnboardingWizardView: View {
 
     private func previewPane(_ label: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(label).font(.alState).tracking(0.8).foregroundStyle(Color.mutedBase)
+            Text(label).font(.alState).tracking(0.8).textCase(.uppercase).foregroundStyle(Color.mutedBase)
             RoundedRectangle(cornerRadius: AlembicMetrics.r1, style: .continuous)
                 .fill(Color.inputBg)
                 .frame(height: 34)
         }
         .frame(maxWidth: .infinity)
     }
-
-    // Near-black label for the gold Accept mock, matching the real gold
-    // GlassButton (warningText collapses to gold-on-gold in dark mode, which
-    // made the mock's "Accept" label invisible).
-    private static let goldMockLabel = Color(red: 0x3a / 255, green: 0x2e / 255, blue: 0x08 / 255)
 
     private func miniButton(_ title: String, tint: Color, fg: Color) -> some View {
         Text(title)
@@ -640,8 +633,8 @@ struct OnboardingWizardView: View {
                 .padding(12)
             }
 
-            Text("You can replay this walkthrough any time from Help,")
-                .font(.alState).foregroundStyle(Color.mutedBase)
+            Text("You can replay this walkthrough any time from the menu bar icon.")
+                .font(.alBody).foregroundStyle(Color.mutedBase)
             Spacer(minLength: 0)
         }
         .onAppear { persistence.markCompleted() }
@@ -773,14 +766,14 @@ private struct ProviderKeyRow: View {
                     .foregroundStyle(saved ? Alembic.accent : Color.mutedBase)
                 Text(title).font(.alBody).bold().foregroundStyle(Color.inkBase)
                 if saved {
-                    Text("key saved").font(.alState).foregroundStyle(Color.mutedBase)
+                    Text("key saved").font(.alState).tracking(0.8).textCase(.uppercase).foregroundStyle(Color.mutedBase)
                 }
                 if importedCaption {
-                    Text("imported").font(.alState).foregroundStyle(Color.mutedBase)
+                    Text("imported").font(.alState).tracking(0.8).textCase(.uppercase).foregroundStyle(Color.mutedBase)
                 }
                 Spacer()
                 if saved {
-                    Label("Saved", systemImage: "checkmark").font(.alState).foregroundStyle(Alembic.accent)
+                    Label("Saved", systemImage: "checkmark").font(.alState).tracking(0.8).textCase(.uppercase).foregroundStyle(Alembic.accent)
                 }
             }
             HStack(spacing: 8) {
@@ -802,77 +795,3 @@ private struct ProviderKeyRow: View {
     }
 }
 
-// MARK: - Legacy view (kept only so the current App.swift compiles)
-
-/// Deprecated permission-only onboarding screen. The current App.swift still
-/// constructs this; the integrator replaces the showOnboarding body with
-/// `OnboardingWizardView` (see the INTEGRATION block at the top of this file)
-/// and then this type can be deleted.
-public struct OnboardingView: View {
-    private let onOpenSettings: () -> Void
-    private let onRecheck: () -> Bool
-    private let onDismiss: () -> Void
-    @State private var granted = false
-
-    public init(
-        onOpenSettings: @escaping () -> Void = {
-            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
-                NSWorkspace.shared.open(url)
-            }
-        },
-        onRecheck: @escaping () -> Bool = { false },
-        onDismiss: @escaping () -> Void = {}
-    ) {
-        self.onOpenSettings = onOpenSettings
-        self.onRecheck = onRecheck
-        self.onDismiss = onDismiss
-    }
-
-    public var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 12) {
-                Image(systemName: "wand.and.stars")
-                    .font(.system(size: 34))
-                    .foregroundStyle(Alembic.accent)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Welcome to AlembicRewrite")
-                        .font(.alembicDisplay(22, weight: .semibold))
-                        .foregroundStyle(Alembic.ink)
-                    Text("One quick permission and you're set.")
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            Text("AlembicRewrite rewrites whatever text you have selected in any app. To read your selection and paste the result back, macOS needs to grant it the Accessibility permission.")
-                .fixedSize(horizontal: false, vertical: true)
-
-            VStack(alignment: .leading, spacing: 6) {
-                Label("Click Open System Settings below.", systemImage: "1.circle")
-                Label("Enable AlembicRewrite under Accessibility.", systemImage: "2.circle")
-                Label("Come back here and click Re-check.", systemImage: "3.circle")
-            }
-            .font(.callout)
-            .foregroundStyle(.secondary)
-
-            if granted {
-                Label("Permission granted. You're ready to go.", systemImage: "checkmark.seal.fill")
-                    .foregroundStyle(Alembic.accent)
-            }
-
-            Spacer(minLength: 0)
-
-            HStack {
-                Button("Open System Settings") { onOpenSettings() }
-                    .buttonStyle(.borderedProminent)
-                Button("Re-check") { granted = onRecheck() }
-                Spacer()
-                Button(granted ? "Done" : "Later") { onDismiss() }
-                    .keyboardShortcut(.defaultAction)
-            }
-        }
-        .padding(24)
-        .frame(width: 460, height: 340)
-        .tint(Alembic.accent)
-        .onAppear { granted = onRecheck() }
-    }
-}

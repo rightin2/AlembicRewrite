@@ -164,6 +164,7 @@ public struct PaletteView: View {
                         .foregroundStyle(Color.inkBase)
                 }
                 caret
+                    .accessibilityHidden(true)
             }
             Spacer(minLength: 8)
             Text("\(model.filtered.count) of \(model.styles.count)")
@@ -173,6 +174,10 @@ public struct PaletteView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Filter styles")
+        .accessibilityValue(model.filter.isEmpty ? "Empty" : model.filter)
+        .accessibilityHint("Type to filter, arrows to choose, Return to run")
     }
 
     /// Blinking accent caret so the static filter reads as a live input (F8).
@@ -229,8 +234,9 @@ public struct PaletteView: View {
                     .padding(6)
                 }
                 .frame(maxHeight: 320)
+                .accessibilityLabel("\(items.count) matching styles")
                 .onChange(of: model.selectedIndex) { newValue in
-                    withAnimation(.easeOut(duration: 0.1)) {
+                    withAnimation(reduceMotion ? nil : .easeOut(duration: 0.1)) {
                         proxy.scrollTo(newValue, anchor: .center)
                     }
                 }
@@ -248,19 +254,21 @@ private struct PaletteRow: View {
             HStack(spacing: 10) {
                 Text(providerGlyph)
                     .font(.alButton)
-                    .foregroundStyle(isSelected ? Color.white : Color.accentText)
+                    .foregroundStyle(isSelected ? Color.onAccent : Color.accentText)
                     .frame(width: 18)
+                    .help(providerName)
+                    .accessibilityLabel(providerName)
                 VStack(alignment: .leading, spacing: 1) {
                     Text(style.name)
                         .font(.alBody)
-                        .foregroundStyle(isSelected ? Color.white : Color.inkBase)
+                        .foregroundStyle(isSelected ? Color.onAccent : Color.inkBase)
                     Text(style.model)
                         .font(.alState)
                         .tracking(0.6)
-                        .foregroundStyle(isSelected ? Color.white.opacity(0.85) : Color.mutedBase)
+                        .foregroundStyle(isSelected ? Color.onAccent.opacity(0.85) : Color.mutedBase)
                 }
                 Spacer()
-                HotkeyGlyph(style.hotkey, color: isSelected ? Color.white.opacity(0.9) : Color.mutedBase)
+                HotkeyGlyph(style.hotkey, color: isSelected ? Color.onAccent.opacity(0.9) : Color.mutedBase)
             }
         }
     }
@@ -269,6 +277,13 @@ private struct PaletteRow: View {
         switch style.provider {
         case .anthropic: return "A"
         case .openai: return "O"
+        }
+    }
+
+    private var providerName: String {
+        switch style.provider {
+        case .anthropic: return "Anthropic"
+        case .openai: return "OpenAI"
         }
     }
 }

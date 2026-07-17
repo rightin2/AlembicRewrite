@@ -67,7 +67,7 @@ struct HUDView: View {
         .opacity(shown ? 1 : 0)
         .onAppear {
             guard !reduceMotion else { shown = true; return }
-            withAnimation(.spring(response: 0.28, dampingFraction: 0.9)) { shown = true }
+            withAnimation(AlembicMotion.spring) { shown = true }
         }
     }
 
@@ -78,7 +78,7 @@ struct HUDView: View {
             HStack(spacing: 9) {
                 ProgressView()
                     .controlSize(.small)
-                Text("Rewriting")
+                Text("Rewriting…")
                     .font(.alBody)
                     .foregroundStyle(Color.inkBase)
                 Button {

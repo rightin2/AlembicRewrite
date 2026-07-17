@@ -57,6 +57,9 @@ enum Alembic {
     static let warningText = dynamic(light: 0x8F5F1E, dark: 0xD9A85F)
     /// Soft warning background (warm-smoke chips). #f4e9d2 / #453a20.
     static let warningSoft = dynamic(light: 0xf4e9d2, dark: 0x453a20)
+    /// Near-black label placed ON the gold fill (the review-panel Accept and the
+    /// onboarding Accept mock). Fixed dark ink both appearances. #3a2e08.
+    static let onGold = dynamic(light: 0x3a2e08, dark: 0x3a2e08)
 
     // MARK: Danger
 
@@ -119,6 +122,14 @@ enum Alembic {
     /// Top specular highlight on frosted chrome. White 0.60, both.
     static let glassTop = Color.white.opacity(0.60)
 
+    // MARK: Hover
+
+    /// Appearance-adaptive hover fill for clear rows and quiet controls: a faint
+    /// dark veil on light surfaces (where a white veil is invisible) and a faint
+    /// white veil on dark surfaces. Replaces the old both-appearances white 0.07.
+    static let hoverFill = dynamicA(light: 0x000000, lightAlpha: 0.05,
+                                    dark: 0xFFFFFF, darkAlpha: 0.07)
+
     // MARK: dynamic helpers
 
     /// Build an appearance-adaptive opaque `Color` from two packed 0xRRGGBB ints.
@@ -160,6 +171,7 @@ extension Color {
     static let warning       = Alembic.warning
     static let warningText   = Alembic.warningText
     static let warningSoft   = Alembic.warningSoft
+    static let onGold        = Alembic.onGold
 
     static let danger        = Alembic.danger
     static let dangerBtnBg   = Alembic.dangerBtnBg
@@ -178,6 +190,7 @@ extension Color {
     static let hairline      = Alembic.hairline
     static let glassRim      = Alembic.glassRim
     static let glassTop      = Alembic.glassTop
+    static let hoverFill     = Alembic.hoverFill
 }
 
 // MARK: - Metrics: radii, spacing, hairline
@@ -419,6 +432,10 @@ extension Font {
     static let alButton  = Font.system(size: 12.5, weight: .semibold)
     /// Field label. Sans 11 bold.
     static let alFieldLabel = Font.system(size: 11, weight: .bold)
+    /// Footnote / helper caption under fields and cards. Sans 11 regular. The
+    /// quiet, sentence-case explanatory line (key-storage note, rotate-banner
+    /// body) that reads as prose rather than a wide-tracked micro-label.
+    static let alFootnote = Font.system(size: 11, weight: .regular)
     /// Wide-tracked uppercase section label. Sans 10.5 heavy. Apply
     /// `.tracking(1.3)` + `.textCase(.uppercase)` at the call site.
     static let alLabel   = Font.system(size: 10.5, weight: .heavy)

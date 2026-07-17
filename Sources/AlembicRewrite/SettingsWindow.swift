@@ -48,7 +48,7 @@ public struct SettingsView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .frame(width: 640, height: 520)
+        .frame(minWidth: 640, minHeight: 520)
         .tint(Alembic.accent)
     }
 }
@@ -79,7 +79,7 @@ struct SettingsTabBar: View {
     var body: some View {
         HStack(spacing: 4) {
             ForEach(SettingsTab.allCases, id: \.self) { t in
-                tabButton(t)
+                SettingsTabButton(tab: t, active: tab == t) { tab = t }
             }
             Spacer()
         }
@@ -87,16 +87,27 @@ struct SettingsTabBar: View {
         .padding(.top, 12)
         .padding(.bottom, 8)
     }
+}
 
-    private func tabButton(_ t: SettingsTab) -> some View {
-        let active = tab == t
-        return Button {
-            tab = t
-        } label: {
+/// One tab in the settings strip: type-ramp label + icon, an accent-vibrant
+/// underline when active, and (UI-8) keyboard focusability with the shared focus
+/// ring, a hover ink-lift, and the selected accessibility trait so the strip is
+/// no longer mouse-only.
+private struct SettingsTabButton: View {
+    let tab: SettingsTab
+    let active: Bool
+    let action: () -> Void
+
+    @FocusState private var focused: Bool
+    @State private var hovering = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        Button(action: action) {
             VStack(spacing: 6) {
                 HStack(spacing: 6) {
-                    Image(systemName: t.symbol).font(.system(size: 11, weight: .semibold))
-                    Text(t.rawValue).font(.system(size: 13, weight: .semibold))
+                    Image(systemName: tab.symbol).font(.alFieldLabel)
+                    Text(tab.rawValue).font(.alButton)
                 }
                 .foregroundStyle(active ? Color.inkBase : Color.mutedBase)
                 RoundedRectangle(cornerRadius: 1, style: .continuous)
@@ -107,6 +118,15 @@ struct SettingsTabBar: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .focusable()
+        .focused($focused)
+        .focusEffectDisabled()
+        .alFocusRing(focused, radius: AlembicMetrics.r2)
+        .brightness(hovering && !active ? 0.06 : 0)
+        .animation(reduceMotion ? nil : AlembicMotion.hover, value: hovering)
+        .onHover { hovering = $0 }
+        .accessibilityLabel(tab.rawValue)
+        .accessibilityAddTraits(active ? [.isButton, .isSelected] : .isButton)
     }
 }
 
@@ -125,7 +145,7 @@ struct SettingsSection<Content: View>: View {
             content()
             if let footnote {
                 Text(footnote)
-                    .font(.system(size: 11))
+                    .font(.alFootnote)
                     .foregroundStyle(Color.mutedBase)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -310,7 +330,7 @@ struct APIKeysTab: View {
                 provider: .openai
             )
             Text("Keys are stored in a private file in the app's Application Support folder, readable only by your user account, and are sent solely to their provider's API. There is no telemetry.")
-                .font(.system(size: 11))
+                .font(.alFootnote)
                 .foregroundStyle(Color.mutedBase)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -324,7 +344,7 @@ struct APIKeysTab: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Bootstrap key imported").font(.alTitle).foregroundStyle(Color.inkBase)
                 Text("An Anthropic key from .secrets/anthropic-key was imported into local storage on first launch. That key was exposed in chat; rotate it in the Anthropic console and paste the new key below.")
-                    .font(.system(size: 11)).foregroundStyle(Color.mutedBase)
+                    .font(.alFootnote).foregroundStyle(Color.mutedBase)
                     .fixedSize(horizontal: false, vertical: true)
                 GlassButton("Dismiss", style: .quiet) { env.setRotateBanner(false) }
             }
@@ -404,6 +424,7 @@ struct StylesTab: View {
 
     @State private var styles: [Style] = []
     @State private var selectedID: UUID?
+    @State private var confirmingDelete = false
 
     var body: some View {
         HStack(spacing: 0) {
@@ -439,14 +460,35 @@ struct StylesTab: View {
 
             HStack(spacing: 6) {
                 Button(action: addStyle) { Image(systemName: "plus") }
-                Button(action: deleteSelected) { Image(systemName: "minus") }
+                    .help("Add style")
+                    .accessibilityLabel("Add style")
+                Button { confirmingDelete = true } label: { Image(systemName: "minus") }
                     .disabled(selectedID == nil)
+                    .help("Delete style")
+                    .accessibilityLabel("Delete style")
                 Spacer()
             }
             .buttonStyle(.borderless)
             .foregroundStyle(Color.inkBase)
             .padding(8)
         }
+        // UI-20: deleting a style is destructive with no undo, so confirm first.
+        .confirmationDialog(
+            "Delete \(selectedStyleName)?",
+            isPresented: $confirmingDelete,
+            titleVisibility: .visible
+        ) {
+            Button("Delete \(selectedStyleName)", role: .destructive, action: deleteSelected)
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This removes the style and its hotkey. It cannot be undone.")
+        }
+    }
+
+    private var selectedStyleName: String {
+        guard let index = selectedIndex else { return "style" }
+        let name = styles[index].name
+        return name.isEmpty ? "Untitled" : name
     }
 
     @ViewBuilder

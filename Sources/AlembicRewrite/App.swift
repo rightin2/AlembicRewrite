@@ -129,7 +129,8 @@ final class WindowManager: NSObject, NSWindowDelegate {
         let hosting = NSHostingController(rootView: root)
         let win = NSWindow(contentViewController: hosting)
         win.title = "AlembicRewrite Settings"
-        win.styleMask = [.titled, .closable, .miniaturizable]
+        win.styleMask = [.titled, .closable, .miniaturizable, .resizable]
+        win.contentMinSize = NSSize(width: 640, height: 520)
         win.isReleasedWhenClosed = false
         win.delegate = self
         win.center()
@@ -153,6 +154,7 @@ final class WindowManager: NSObject, NSWindowDelegate {
         )
         let hosting = NSHostingController(rootView: root)
         let win = NSWindow(contentViewController: hosting)
+        win.title = "AlembicRewrite Setup"
         win.styleMask = [.titled, .closable]
         win.titlebarAppearsTransparent = true
         win.titleVisibility = .hidden
@@ -183,6 +185,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let env = AppEnvironment()
     let windows = WindowManager()
     lazy var coordinator = RewriteCoordinator(env: env, windows: windows)
+    let updatePolicy = UpdatePolicy()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Set the Dock/app icon at runtime. A bare SPM executable has no
@@ -228,6 +231,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         windows.onTryPalette = { [weak coordinator] in
             coordinator?.handleGlobalHotkey()
         }
+
+        // Quietly ask GitHub whether a newer release exists (at most once a day).
+        // Non-blocking; the menu banner surfaces a result if one is found, and
+        // every failure path collapses to showing nothing.
+        Task { await updatePolicy.checkOnLaunch() }
     }
 
     /// Honour history clear-on-quit and the session-only retention mode (setting
@@ -246,6 +254,11 @@ struct MenuContent: View {
     @ObservedObject var env: AppEnvironment
     let windows: WindowManager
     let coordinator: RewriteCoordinator
+    @ObservedObject var updatePolicy: UpdatePolicy
+
+    /// The history entry copied most recently, cleared after a short beat so the
+    /// row's transient "Copied" confirmation reads as feedback, not a badge.
+    @State private var copiedEntryID: UUID?
 
     var body: some View {
         // `env` is observed, so the coordinator's `bumpRefresh()` after each
@@ -253,6 +266,7 @@ struct MenuContent: View {
         // stores are re-read on every render.
         GlassPanel(radius: AlembicMetrics.r3, material: .popover) {
             VStack(alignment: .leading, spacing: 14) {
+                UpdateBanner(policy: updatePolicy)
                 spendCard
                 GlassButton("Rewrite Selection",
                             style: .primaryFlat,
@@ -331,10 +345,20 @@ struct MenuContent: View {
                 ScrollView {
                     VStack(spacing: 2) {
                         ForEach(entries.prefix(10)) { entry in
-                            GlassListRow {
-                                historyRow(entry)
+                            Button {
+                                copyToClipboard(entry.result)
+                                copiedEntryID = entry.id
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                    if copiedEntryID == entry.id { copiedEntryID = nil }
+                                }
+                            } label: {
+                                GlassListRow {
+                                    historyRow(entry, copied: copiedEntryID == entry.id)
+                                }
                             }
-                            .onTapGesture { copyToClipboard(entry.result) }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("\(entry.styleName), \(timestamp(entry.timestamp))")
+                            .accessibilityHint("Copies the rewrite")
                         }
                     }
                 }
@@ -343,7 +367,7 @@ struct MenuContent: View {
         }
     }
 
-    private func historyRow(_ entry: HistoryEntry) -> some View {
+    private func historyRow(_ entry: HistoryEntry, copied: Bool) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack(spacing: 6) {
                 Text(entry.styleName)
@@ -351,10 +375,23 @@ struct MenuContent: View {
                     .foregroundStyle(Color.inkBase)
                     .lineLimit(1)
                 Spacer(minLength: 6)
-                Text(timestamp(entry.timestamp))
-                    .font(.alState)
-                    .tracking(0.6)
-                    .foregroundStyle(Color.mutedBase)
+                if copied {
+                    HStack(spacing: 3) {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 9, weight: .bold))
+                        Text("Copied")
+                            .font(.alState)
+                            .tracking(0.8)
+                            .textCase(.uppercase)
+                    }
+                    .foregroundStyle(Color.accentText)
+                    .transition(.opacity)
+                } else {
+                    Text(timestamp(entry.timestamp))
+                        .font(.alState)
+                        .tracking(0.6)
+                        .foregroundStyle(Color.mutedBase)
+                }
             }
             Text(snippet(entry.result))
                 .font(.alState)
@@ -409,9 +446,7 @@ struct MenuContent: View {
     }
 
     private func timestamp(_ date: Date) -> String {
-        let f = DateFormatter()
-        f.dateFormat = "d MMM, h:mm a"
-        return f.string(from: date)
+        date.formatted(.dateTime.day().month().hour().minute())
     }
 
     private func copyToClipboard(_ text: String) {
@@ -438,7 +473,8 @@ struct AlembicRewriteApp: App {
             MenuContent(
                 env: appDelegate.env,
                 windows: appDelegate.windows,
-                coordinator: appDelegate.coordinator
+                coordinator: appDelegate.coordinator,
+                updatePolicy: appDelegate.updatePolicy
             )
         } label: {
             // Bundled Alembic menu-bar glyph (template-rendered so it adapts to
@@ -446,8 +482,10 @@ struct AlembicRewriteApp: App {
             // missing.
             if let icon = AppIcons.menuBarIcon() {
                 Image(nsImage: icon)
+                    .accessibilityLabel("AlembicRewrite")
             } else {
                 Image(systemName: "wand.and.stars")
+                    .accessibilityLabel("AlembicRewrite")
             }
         }
         .menuBarExtraStyle(.window)
