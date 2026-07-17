@@ -74,8 +74,13 @@ public struct AnthropicClient: LLMClienting {
                                 outputTokens = output
                             }
                         case "error":
-                            let message = (event["error"] as? [String: Any])?["message"] as? String ?? "Anthropic stream error"
-                            throw LLMError.httpError(status: 200, body: message)
+                            let err = event["error"] as? [String: Any]
+                            let errType = err?["type"] as? String ?? ""
+                            let message = err?["message"] as? String ?? "Anthropic stream error"
+                            if errType == "overloaded_error" {
+                                throw LLMError.providerOverloaded(.anthropic)
+                            }
+                            throw LLMError.streamError(message: message)
                         default:
                             continue
                         }

@@ -27,6 +27,11 @@ public enum LLMError: LocalizedError, Sendable {
     case invalidResponse
     /// The API key handed to the backend was empty.
     case missingAPIKey(Provider)
+    /// The provider accepted the request but reported it is temporarily
+    /// overloaded (Anthropic overloaded_error / HTTP 529). Transient; retry.
+    case providerOverloaded(Provider)
+    /// The provider reported an error inside an otherwise-successful stream.
+    case streamError(message: String)
 
     public var errorDescription: String? {
         switch self {
@@ -41,6 +46,10 @@ public enum LLMError: LocalizedError, Sendable {
             return "The provider returned an unexpected response."
         case .missingAPIKey(let provider):
             return "No API key configured for \(provider.rawValue)."
+        case .providerOverloaded(let provider):
+            return "\(provider.rawValue.capitalized) is briefly overloaded. Wait a few seconds and press Retry."
+        case .streamError(let message):
+            return message
         }
     }
 
@@ -79,6 +88,12 @@ enum LLMTransport {
             throw LLMError.invalidResponse
         }
         guard (200..<300).contains(http.statusCode) else {
+            // 529 is Anthropic's dedicated overloaded status; 503 is the
+            // generic equivalent. Both are transient and worth a retry.
+            if http.statusCode == 529 || http.statusCode == 503 {
+                throw LLMError.providerOverloaded(
+                    request.url?.host?.contains("anthropic") == true ? .anthropic : .openai)
+            }
             var data = Data()
             for try await byte in bytes {
                 data.append(byte)
