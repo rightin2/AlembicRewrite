@@ -433,6 +433,12 @@ struct MenuContent: View {
             GlassButton("Quit AlembicRewrite", style: .quiet) {
                 NSApplication.shared.terminate(nil)
             }
+            Text("AlembicRewrite v\(AppVersion.currentString)")
+                .font(.system(size: 11))
+                .foregroundStyle(Alembic.inkMuted)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 4)
+                .accessibilityLabel("Installed version \(AppVersion.currentString)")
         }
     }
 

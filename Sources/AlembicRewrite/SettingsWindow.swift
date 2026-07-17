@@ -178,6 +178,20 @@ struct GeneralTab: View {
 
     var body: some View {
         SettingsScroll {
+            SettingsSection(title: "About") {
+                HStack {
+                    Text("Version")
+                        .foregroundStyle(Alembic.ink)
+                    Spacer()
+                    Text(AppVersion.currentString)
+                        .font(.system(.body, design: .monospaced))
+                        .foregroundStyle(Alembic.inkMuted)
+                        .textSelection(.enabled)
+                }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Version \(AppVersion.currentString)")
+            }
+
             // 3 (startup)
             SettingsSection(title: "Startup") {
                 GlassToggle("Launch AlembicRewrite at login", isOn: $launchAtLogin)
