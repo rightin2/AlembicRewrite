@@ -37,4 +37,14 @@ PLIST
 
 # Ad-hoc sign with a stable identifier so the Accessibility grant survives rebuilds
 codesign --force --deep --sign - --identifier com.alembic.rewrite "$APP"
-echo "Installed $APP (version $VERSION)"
+
+# Restart if it was running: a live process whose on-disk bundle has been
+# replaced loses network access (signature mismatch -> NSURLError -1005).
+if pgrep -xq AlembicRewrite; then
+  killall AlembicRewrite 2>/dev/null || true
+  sleep 1
+  open "$APP"
+  echo "Installed $APP (version $VERSION) and restarted the running app"
+else
+  echo "Installed $APP (version $VERSION)"
+fi
