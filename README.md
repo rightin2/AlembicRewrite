@@ -25,7 +25,7 @@ You highlight text anywhere on your Mac, press a key, and the selection is repla
 
 1. Download `AlembicRewrite.dmg` from the [latest release](https://github.com/rightin2/AlembicRewrite/releases/latest/download/AlembicRewrite.dmg) (about 6.9 MB, macOS 14 Sonoma or later).
 2. Open the DMG and drag **AlembicRewrite** into your Applications folder.
-3. **First launch:** because the app is not notarised through the App Store, a normal double-click will be blocked. Right-click (or Control-click) the app icon, choose **Open**, then confirm **Open** in the dialog. You only do this once.
+3. **First launch:** because the app is not notarised through the App Store, macOS blocks it once. Double-click the app, let macOS refuse it, then open **System Settings > Privacy & Security**, scroll down, and click **Open Anyway** next to the AlembicRewrite message. On macOS 14 (Sonoma) you can instead right-click the app and choose **Open** twice. Either way, once only.
 4. Grant **Accessibility** permission when prompted. This is how the app reads your selection and pastes the rewrite back.
 5. Open **Settings** from the menu-bar icon and paste an Anthropic or OpenAI API key into the API Keys tab.
 6. Select some text, press `Cmd+Shift+R` for an instant rewrite, or `Cmd+Shift+E` to pick a style.

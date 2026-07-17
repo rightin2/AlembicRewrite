@@ -23,9 +23,12 @@ cat > "$STAGE/READ ME FIRST.txt" <<'TXT'
 AlembicRewrite - install notes
 
 1. Drag AlembicRewrite.app into the Applications folder alongside it.
-2. First launch: RIGHT-CLICK the app and choose "Open", then "Open" again.
-   (The app is not notarized with Apple, so a normal double-click will be
-   blocked the first time. Right-click > Open only needs doing once.)
+2. First launch (the app is not notarized with Apple, so macOS blocks it once):
+   - Double-click the app. macOS will say it cannot be opened. Click Done.
+   - Open System Settings > Privacy & Security, scroll down, and click
+     "Open Anyway" next to the AlembicRewrite message, then confirm.
+   - On macOS 14 (Sonoma) you can instead right-click the app and choose
+     "Open" twice. Either way, this only needs doing once.
 3. The setup walkthrough will ask for:
    - Accessibility permission (needed to read your selected text)
    - Your own Anthropic or OpenAI API key (Settings > API Keys).
