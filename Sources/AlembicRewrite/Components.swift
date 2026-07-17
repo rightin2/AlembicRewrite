@@ -617,17 +617,21 @@ extension View {
     ///     .alFocusRing(armed, radius: 8)
     /// ```
     func alFocusRing(_ on: Bool, radius: CGFloat = AlembicFocusRing.radius) -> some View {
+        // Both strokes are drawn INSIDE the control's bounds (strokeBorder draws
+        // inward), so the near-white outer stroke never bleeds outward as a pale
+        // halo box around the button. The near-white stroke rides the edge; the
+        // accent stroke sits just inside it.
         self
-            .overlay(
-                RoundedRectangle(cornerRadius: radius, style: .continuous)
-                    .strokeBorder(AlembicFocusRing.innerColor,
-                                  lineWidth: AlembicFocusRing.innerWidth)
-                    .opacity(on ? 1 : 0)
-            )
             .overlay(
                 RoundedRectangle(cornerRadius: radius, style: .continuous)
                     .strokeBorder(AlembicFocusRing.outerColor,
                                   lineWidth: AlembicFocusRing.outerWidth)
+                    .opacity(on ? 1 : 0)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: radius, style: .continuous)
+                    .strokeBorder(AlembicFocusRing.innerColor,
+                                  lineWidth: AlembicFocusRing.innerWidth)
                     .padding(AlembicFocusRing.outerInset)
                     .opacity(on ? 1 : 0)
             )

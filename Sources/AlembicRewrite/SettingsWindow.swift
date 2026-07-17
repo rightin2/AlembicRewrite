@@ -160,7 +160,7 @@ struct GeneralTab: View {
         SettingsScroll {
             // 3 (startup)
             SettingsSection(title: "Startup") {
-                GlassToggle("Launch Prompt Rewriter at login", isOn: $launchAtLogin)
+                GlassToggle("Launch AlembicRewrite at login", isOn: $launchAtLogin)
                     .onChange(of: launchAtLogin) { _, on in
                         do {
                             if on { try SMAppService.mainApp.register() }
@@ -202,7 +202,7 @@ struct GeneralTab: View {
             // 3.9 Accessibility permission status and re-grant.
             SettingsSection(
                 title: "Accessibility",
-                footnote: "Prompt Rewriter needs Accessibility permission to read your selection and paste the rewrite. If it is revoked after an OS update, rewrites fail silently."
+                footnote: "AlembicRewrite needs Accessibility permission to read your selection and paste the rewrite. If it is revoked after an OS update, rewrites fail silently."
             ) {
                 HStack(spacing: 12) {
                     if accessibilityGranted {

@@ -292,8 +292,10 @@ enum AlembicFocusRing {
     static let outerColor = Color.white.opacity(0.9)
     /// Outer stroke width, points.
     static let outerWidth: CGFloat = 2
-    /// Outer stroke inset relative to the inner (drawn with `.padding(-2)`).
-    static let outerInset: CGFloat = -2
+    /// Inset (points) the inner accent stroke sits inside the outer white
+    /// stroke. The whole ring is drawn WITHIN the control's bounds so the
+    /// near-white outer stroke can never bleed outward as a pale halo box.
+    static let outerInset: CGFloat = 2
     /// Default corner radius the ring is drawn at (r1).
     static let radius: CGFloat = AlembicMetrics.r1
 }

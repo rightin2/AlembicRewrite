@@ -128,7 +128,7 @@ final class WindowManager: NSObject, NSWindowDelegate {
         let root = SettingsView().environmentObject(env)
         let hosting = NSHostingController(rootView: root)
         let win = NSWindow(contentViewController: hosting)
-        win.title = "Prompt Rewriter Settings"
+        win.title = "AlembicRewrite Settings"
         win.styleMask = [.titled, .closable, .miniaturizable]
         win.isReleasedWhenClosed = false
         win.delegate = self
@@ -159,7 +159,7 @@ final class WindowManager: NSObject, NSWindowDelegate {
         win.isMovableByWindowBackground = true
         win.isReleasedWhenClosed = false
         win.delegate = self
-        win.setContentSize(NSSize(width: 560, height: 470))
+        win.setContentSize(NSSize(width: 560, height: 540))
         win.center()
         onboardingWindow = win
         win.makeKeyAndOrderFront(nil)
@@ -393,7 +393,7 @@ struct MenuContent: View {
             GlassButton("Settings", style: .quiet) {
                 windows.showSettings(env: env)
             }
-            GlassButton("Quit Prompt Rewriter", style: .quiet) {
+            GlassButton("Quit AlembicRewrite", style: .quiet) {
                 NSApplication.shared.terminate(nil)
             }
         }

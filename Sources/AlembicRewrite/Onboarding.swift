@@ -134,16 +134,24 @@ struct OnboardingWizardView: View {
             VStack(spacing: 0) {
                 header
                 Divider().overlay(Color.hairline)
-                stepContent
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .padding(.horizontal, 28)
-                    .padding(.top, 20)
-                    .id(step)
-                    .transition(stepTransition)
+                // Scrollable middle so no step can ever push the footer off the
+                // bottom edge; the footer is pinned outside the ScrollView and
+                // always fully visible. Indicators appear only when a step
+                // overflows (the settings tour).
+                ScrollView {
+                    stepContent
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                        .padding(.horizontal, 28)
+                        .padding(.top, 20)
+                        .padding(.bottom, 8)
+                }
+                .frame(maxHeight: .infinity)
+                .id(step)
+                .transition(stepTransition)
                 footer
             }
         }
-        .frame(width: 560, height: 470)
+        .frame(width: 560, height: 540)
         .tint(Alembic.accent)
         .onAppear { recheckPermission(); loadKeys() }
     }
@@ -158,7 +166,7 @@ struct OnboardingWizardView: View {
 
     private var header: some View {
         HStack(alignment: .center) {
-            Text("Prompt Rewriter")
+            Text("AlembicRewrite")
                 .font(.alTitle)
                 .foregroundStyle(Color.inkBase)
             Spacer()
@@ -261,7 +269,7 @@ struct OnboardingWizardView: View {
                 openSettings(); go(to: .finish)
             }
         case .finish:
-            GlassButton("Start using Prompt Rewriter", style: .primaryLiquid, large: true) {
+            GlassButton("Start using AlembicRewrite", style: .primaryLiquid, large: true) {
                 persistence.markCompleted(); onClose()
             }
         }
@@ -274,10 +282,10 @@ struct OnboardingWizardView: View {
             Image(systemName: "wand.and.stars")
                 .font(.system(size: 40))
                 .foregroundStyle(Alembic.accent)
-            Text("Welcome to Prompt Rewriter")
+            Text("Welcome to AlembicRewrite")
                 .font(.alTitleLg)
                 .foregroundStyle(Color.inkBase)
-            Text("Prompt Rewriter rewrites whatever text you have selected, in any app, using styles you control. This quick walkthrough gets you set up in about a minute.")
+            Text("AlembicRewrite rewrites whatever text you have selected, in any app, using styles you control. This quick walkthrough gets you set up in about a minute.")
                 .font(.alBody)
                 .foregroundStyle(Color.inkBase)
                 .fixedSize(horizontal: false, vertical: true)
@@ -314,20 +322,20 @@ struct OnboardingWizardView: View {
             }
 
             if showGateNote && !granted {
-                Text("Grant Accessibility first. It is the one permission Prompt Rewriter cannot run without.")
+                Text("Grant Accessibility first. It is the one permission AlembicRewrite cannot run without.")
                     .font(.alBody)
                     .foregroundStyle(Color.warningText)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            Text("To read your selection and paste a rewrite back, macOS needs to grant Prompt Rewriter the Accessibility permission.")
+            Text("To read your selection and paste a rewrite back, macOS needs to grant AlembicRewrite the Accessibility permission.")
                 .font(.alBody)
                 .foregroundStyle(Color.inkBase)
                 .fixedSize(horizontal: false, vertical: true)
 
             VStack(alignment: .leading, spacing: 8) {
                 permissionNumberedItem("1", "Click Open System Settings below.")
-                permissionNumberedItem("2", "Enable Prompt Rewriter under Accessibility.")
+                permissionNumberedItem("2", "Enable AlembicRewrite under Accessibility.")
                 permissionNumberedItem("3", "Come back here and click Re-check.")
             }
 
@@ -367,7 +375,7 @@ struct OnboardingWizardView: View {
             Text("Add an API key")
                 .font(.alTitleLg)
                 .foregroundStyle(Color.inkBase)
-            Text("Prompt Rewriter uses your own key. It is stored in your macOS Keychain and never leaves this machine. Add at least one to continue.")
+            Text("AlembicRewrite uses your own key. It is stored in your macOS Keychain and never leaves this machine. Add at least one to continue.")
                 .font(.alBody)
                 .foregroundStyle(Color.inkBase)
                 .fixedSize(horizontal: false, vertical: true)
@@ -405,7 +413,7 @@ struct OnboardingWizardView: View {
             Text("Try your first rewrite")
                 .font(.alTitleLg)
                 .foregroundStyle(Color.inkBase)
-            Text("Select the sample line below, then press the AlembicRewriter hotkey. Prompt Rewriter reads the selection, rewrites it, and pastes the result straight back in place.")
+            Text("Select the sample line below, then press the AlembicRewriter hotkey. AlembicRewrite reads the selection, rewrites it, and pastes the result straight back in place.")
                 .font(.alBody)
                 .foregroundStyle(Color.inkBase)
                 .fixedSize(horizontal: false, vertical: true)
@@ -480,7 +488,7 @@ struct OnboardingWizardView: View {
                 }
                 .padding(10)
             }
-            Text("Press Cmd+Shift+E anywhere. Type to filter your styles, press Return to run the highlighted one,")
+            Text("Press Cmd+Shift+E anywhere. Type to filter your styles, then press Return to run the highlighted one.")
                 .font(.alBody).foregroundStyle(Color.mutedBase)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -498,7 +506,7 @@ struct OnboardingWizardView: View {
                         Spacer()
                         miniButton("Cancel", tint: Color.surface3, fg: Color.inkBase)
                         miniButton("Retry", tint: Color.surface3, fg: Color.inkBase)
-                        miniButton("Accept", tint: Alembic.gold, fg: Color.warningText)
+                        miniButton("Accept", tint: Alembic.gold, fg: Self.goldMockLabel)
                     }
                 }
                 .padding(10)
@@ -530,6 +538,11 @@ struct OnboardingWizardView: View {
         .frame(maxWidth: .infinity)
     }
 
+    // Near-black label for the gold Accept mock, matching the real gold
+    // GlassButton (warningText collapses to gold-on-gold in dark mode, which
+    // made the mock's "Accept" label invisible).
+    private static let goldMockLabel = Color(red: 0x3a / 255, green: 0x2e / 255, blue: 0x08 / 255)
+
     private func miniButton(_ title: String, tint: Color, fg: Color) -> some View {
         Text(title)
             .font(.alButton).foregroundStyle(fg)
@@ -548,14 +561,14 @@ struct OnboardingWizardView: View {
                 .font(.alBody).foregroundStyle(Color.inkBase)
                 .fixedSize(horizontal: false, vertical: true)
 
-            ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
-                    settingsGroup("Everyday defaults", Self.everydayDefaults)
-                    settingsGroup("Spending controls", Self.spendingControls)
-                    settingsGroup("Safety and undo", Self.safetyAndUndo)
-                    settingsGroup("Privacy", Self.privacy)
-                }
-                .padding(.bottom, 4)
+            // The whole wizard middle is already a ScrollView (see body), so the
+            // groups flow into it and all ten settings scroll into view with the
+            // footer pinned. No nested ScrollView, which would fight the outer one.
+            VStack(alignment: .leading, spacing: 12) {
+                settingsGroup("Everyday defaults", Self.everydayDefaults)
+                settingsGroup("Spending controls", Self.spendingControls)
+                settingsGroup("Safety and undo", Self.safetyAndUndo)
+                settingsGroup("Privacy", Self.privacy)
             }
 
             Button("Dismiss") { go(to: .finish) }
@@ -822,7 +835,7 @@ public struct OnboardingView: View {
                     .font(.system(size: 34))
                     .foregroundStyle(Alembic.accent)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Welcome to Prompt Rewriter")
+                    Text("Welcome to AlembicRewrite")
                         .font(.alembicDisplay(22, weight: .semibold))
                         .foregroundStyle(Alembic.ink)
                     Text("One quick permission and you're set.")
@@ -830,12 +843,12 @@ public struct OnboardingView: View {
                 }
             }
 
-            Text("Prompt Rewriter rewrites whatever text you have selected in any app. To read your selection and paste the result back, macOS needs to grant it the Accessibility permission.")
+            Text("AlembicRewrite rewrites whatever text you have selected in any app. To read your selection and paste the result back, macOS needs to grant it the Accessibility permission.")
                 .fixedSize(horizontal: false, vertical: true)
 
             VStack(alignment: .leading, spacing: 6) {
                 Label("Click Open System Settings below.", systemImage: "1.circle")
-                Label("Enable Prompt Rewriter under Accessibility.", systemImage: "2.circle")
+                Label("Enable AlembicRewrite under Accessibility.", systemImage: "2.circle")
                 Label("Come back here and click Re-check.", systemImage: "3.circle")
             }
             .font(.callout)
